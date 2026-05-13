@@ -139,7 +139,7 @@ export default function ProductCard({ product }) {
 
         {/* PRICE + BUTTONS */}
         <div className="mt-auto flex items-center justify-between pt-4">
-          <div className="flex flex-col">
+          {/* <div className="flex flex-col">
             {product.originalPrice && (
               <span className="text-gray-400 line-through text-[10px] sm:text-xs">
                 ₹{product.originalPrice}
@@ -148,7 +148,28 @@ export default function ProductCard({ product }) {
             <span className="text-base sm:text-lg font-bold text-black">
               ₹{product.discountPrice}
             </span>
-          </div>
+          </div> */}
+          <div className="flex flex-col">
+  {/* Original Price */}
+  <span className="text-gray-400 line-through text-[10px] sm:text-xs">
+    ₹{product.price}
+  </span>
+
+  {/* Discount Price */}
+  <span className="text-base sm:text-lg font-bold text-black">
+    ₹{product.discountPrice}
+  </span>
+
+  {/* Discount Percentage */}
+  {product.price && product.discountPrice && (
+    <span className="text-green-600 text-[10px] sm:text-xs font-medium">
+      {Math.round(
+        ((product.price - product.discountPrice) / product.price) * 100
+      )}
+      % OFF
+    </span>
+  )}
+</div>
 
           <div className="flex items-center gap-2">
             <button
