@@ -14,7 +14,7 @@ export default function Categories() {
   const location = useLocation();
 
   const fetchCategories = async () => {
-    setLoading(true);
+    setLoading(true); 
     try {
       const response = await fetch(`${backendUrl}/api/category`);
       const data = await response.json();

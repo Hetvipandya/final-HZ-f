@@ -12,7 +12,7 @@ export default function Products() {
   const backendUrl = process.env.REACT_APP_BACKEND_URL || BASE_URL;
 
   // 🔥 FETCH PRODUCTS
-  useEffect(() => {
+  useEffect(() => { 
     fetchProducts();
   }, [location]); 
 
@@ -151,7 +151,7 @@ export default function Products() {
 
                   {/* PRICE */}
                   <td className="p-3 font-semibold text-primary">
-                    ₹{product.discountPrice || 0}
+                    ₹{product.price || 0}
                   </td>
 
                   {/* RATING */}

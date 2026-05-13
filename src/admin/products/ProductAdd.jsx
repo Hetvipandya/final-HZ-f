@@ -15,7 +15,7 @@ export default function ProductAdd() {
     categoryId: "",
     price: "",
     rating: "",
-    discountPrice: "",
+    discountPrice: "", 
     description: "",
     isActive: true,
     images: "",
