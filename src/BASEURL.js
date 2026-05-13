@@ -1,5 +1,5 @@
-const BASE_URL = "http://localhost:5001";
-// const BASE_URL = "https://harsh-patel-holly-zolly-backend.onrender.com";
+// const BASE_URL = "http://localhost:5001";
+const BASE_URL = "https://final-hz-b.onrender.com";
 
 export const getImageUrl = (src, fallback = "https://via.placeholder.com/300?text=No+Image") => {
   if (!src || typeof src !== "string") return fallback;
