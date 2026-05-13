@@ -140,9 +140,9 @@ export default function ProductCard({ product }) {
         {/* PRICE + BUTTONS */}
         <div className="mt-auto flex items-center justify-between pt-4">
           <div className="flex flex-col">
-            {product.price && (
+            {product.originalPrice && (
               <span className="text-gray-400 line-through text-[10px] sm:text-xs">
-                ₹{product.price}
+                ₹{product.originalPrice}
               </span>
             )}
             <span className="text-base sm:text-lg font-bold text-black">
