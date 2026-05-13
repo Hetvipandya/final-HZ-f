@@ -71,7 +71,6 @@ export default function ProductAdd() {
       fd.append("productName", form.productName);
       fd.append("price", String(Number(form.price)));
       fd.append("discountPrice", String(Number(form.discountPrice || form.price)));
-      fd.append("originalPrice", String(Number(form.originalPrice || 0)));
       fd.append("rating", String(Number(form.rating || 0)));
       fd.append("categoryId", form.categoryId);
       fd.append("size", form.size);
@@ -81,9 +80,10 @@ export default function ProductAdd() {
       fd.append("isSale", String(!!form.isSale));
       fd.append("createdAt", createdAt);
 
-      if (imageFiles[0]) {
-  fd.append("image", imageFiles[0]);
-}
+      // Append all selected images
+      imageFiles.forEach((file) => {
+        fd.append("images", file);
+      });
 
       const res = await fetch(`${backendUrl}/api/product/create`, {
         method: "POST",
