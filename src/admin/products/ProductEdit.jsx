@@ -50,7 +50,7 @@ export default function ProductEdit() {
           sizes: Array.isArray(p?.sizes)
             ? p.sizes.join(", ")
             : p?.sizes || p?.size || "",
-          images: imagesArr.join(", "),
+          images: imagesArr,
           description: p?.description || "",
           isActive: p?.isActive ?? true,
           isBestSeller: !!p?.isBestSeller,
@@ -99,31 +99,39 @@ export default function ProductEdit() {
     setErrorMessage("");
 
     try {
-      const images = String(form.images || "")
-        .split(/[\n,]/g)
-        .map((s) => s.trim())
-        .filter(Boolean);
+      // Existing images (keep the string URLs)
+      const existingImages = Array.isArray(form.images)
+        ? form.images.filter(img => typeof img === 'string' && img.trim())
+        : [];
 
       const sizes = String(form.sizes || "")
         .split(/[,\n]/g)
         .map((s) => s.trim())
         .filter(Boolean);
 
-      const updatedProduct = {
-        productName: form.name,
-        price: Number(form.price),
-        discountPrice: Number(form.discountPrice || form.price),
-        rating: Number(form.rating),
-        categoryId: form.categoryId,
-        sizes,
-        size: form.sizes,
-        description: form.description,
-        isActive: form.isActive,
-        isBestSeller: form.isBestSeller,
-        isSale: form.isSale,
-        images,
-        image: images[0],
-      };
+      // Create FormData for multipart/form-data
+      const formData = new FormData();
+      
+      formData.append("productName", form.name);
+      formData.append("price", Number(form.price));
+      formData.append("discountPrice", Number(form.discountPrice || form.price));
+      formData.append("rating", Number(form.rating));
+      formData.append("categoryId", form.categoryId);
+      formData.append("sizes", JSON.stringify(sizes));
+      formData.append("description", form.description);
+      formData.append("isActive", form.isActive);
+      formData.append("isBestSeller", form.isBestSeller);
+      formData.append("isSale", form.isSale);
+
+      // Append existing images
+      existingImages.forEach((img, index) => {
+        formData.append(`existingImages[${index}]`, img);
+      });
+
+      // Append new image files
+      imageFiles.forEach((file, index) => {
+        formData.append(`images`, file);
+      });
 
       const token = localStorage.getItem("adminToken");
 
@@ -132,12 +140,11 @@ export default function ProductEdit() {
         {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json",
             ...(token && {
               Authorization: `Bearer ${token}`,
             }),
           },
-          body: JSON.stringify(updatedProduct),
+          body: formData,
         }
       );
 
@@ -321,13 +328,9 @@ export default function ProductEdit() {
 
 
   {/* IMAGE PREVIEW */}
-  {form.images && (
+  {form.images && Array.isArray(form.images) && form.images.length > 0 && (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-      {form.images
-        .split(/[\n,]/g)
-        .map((img, index) => img.trim())
-        .filter(Boolean)
-        .map((img, index) => (
+      {form.images.map((img, index) => (
           <div
             key={index}
             className="relative border rounded-2xl overflow-hidden bg-gray-100 h-32"
