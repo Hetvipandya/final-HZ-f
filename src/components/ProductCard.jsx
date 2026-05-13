@@ -84,10 +84,10 @@ export default function ProductCard({ product }) {
   };
 
   const discount =
-    product.originalPrice && product.discountPrice
+    product.price && product.discountPrice
       ? Math.round(
-        ((product.originalPrice - product.discountPrice) /
-          product.originalPrice) *
+        ((product.price - product.discountPrice) /
+          product.price) *
         100
       )
       : 0;
