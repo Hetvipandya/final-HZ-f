@@ -71,7 +71,7 @@ export default function ProductCard({ product }) {
       cart.push({
         _id: product._id,
         name: product.productName,
-        price: product.discountPrice,
+        price: product.price,
         image: product.images?.[0] || product.image,
         quantity: 1,
       });
