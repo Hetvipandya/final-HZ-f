@@ -47,18 +47,7 @@ export default function OrderDetails() {
           id: o._id,
           date: new Date(o.createdAt).toLocaleString(),
           status: o.status,
-       total: o.products.reduce((acc, p) => {
-
-  const product = p.productId || {};
-
-  const finalPrice =
-    Number(product.discountPrice) ||
-    Number(product.price) ||
-    0;
-
-  return acc + finalPrice * p.quantity;
-
-}, 0),
+          total: o.totalPrice,
 
 items: o.products.map((p) => {
 
@@ -271,7 +260,7 @@ const handleConfirm = async () => {
   </p>
 )}
                     <p className="text-gray-900 font-bold mt-1">
-  Total: ₹{item.price * item.quantity}
+  Total: ₹{item.discountPrice * item.quantity}
 </p>
                     </div>
 
