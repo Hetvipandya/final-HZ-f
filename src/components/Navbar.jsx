@@ -1,132 +1,293 @@
 
 
+// import { NavLink } from "react-router-dom";
+// import { useState, useEffect } from "react";
+// import { FaBars, FaTimes } from "react-icons/fa";
+// import {
+//   FiSearch,
+//   FiHeart,
+//   FiShoppingCart,
+//   FiUser,
+// } from "react-icons/fi";
+// import SearchModal from "./SearchModal";
+// import BASE_URL from "../BASEURL";
+
+// export default function Navbar() {
+//   const [open, setOpen] = useState(false);
+//   const [openSearch, setOpenSearch] = useState(false);
+//   const [cartCount, setCartCount] = useState(0);
+//   const [user, setUser] = useState(null);
+//   const [isAdmin, setIsAdmin] = useState(false);
+//   const [categories, setCategories] = useState([]);
+//   const backendUrl = BASE_URL;
+
+//   // ✅ USER + ADMIN LOAD
+//   useEffect(() => {
+//     const loadAuth = () => {
+//       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+//       const adminStatus = localStorage.getItem("isAdmin") === "true";
+
+//       setUser(currentUser);
+//       setIsAdmin(adminStatus);
+//     };
+
+//     loadAuth();
+
+//     window.addEventListener("authChanged", loadAuth);
+//     return () => window.removeEventListener("authChanged", loadAuth);
+//   }, []);
+
+//   // ✅ LOAD CATEGORIES
+//   useEffect(() => {
+//     const loadCategories = async () => {
+//       try {
+//         const res = await fetch(`${backendUrl}/api/category`);
+//         const data = await res.json();
+//         if (data?.success && Array.isArray(data.data)) {
+//           setCategories(data.data.map((category) => category.name));
+//         }
+//       } catch (error) {
+//         console.error("Failed to fetch categories:", error);
+//       }
+//     };
+
+//     loadCategories();
+//   }, []);
+
+//   // ✅ CART COUNT
+//   useEffect(() => {
+//     const updateCounts = () => {
+//       const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+//       const totalQty = cart.reduce(
+//         (sum, item) => sum + Number(item.quantity || 0),
+//         0
+//       );
+//       setCartCount(totalQty);
+//     };
+
+//     updateCounts();
+//     window.addEventListener("cartUpdated", updateCounts);
+
+//     return () => window.removeEventListener("cartUpdated", updateCounts);
+//   }, []);
+
+//   // ✅ BODY SCROLL LOCK
+//   useEffect(() => {
+//     document.body.style.overflow = open ? "hidden" : "auto";
+//     return () => (document.body.style.overflow = "auto");
+//   }, [open]);
+
+//   const navLinkClass = ({ isActive }) =>
+//     isActive
+//       ? "text-black font-semibold border-b-2 border-black pb-1"
+//       : "text-black hover:text-gray-700";
+
+//   return (
+//     <>
+//       {/* NAVBAR */}
+//       <nav className="fixed top-0 left-0 w-full z-[99999] bg-white shadow-md">
+//         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+//           {/* LOGO */}
+//           <NavLink to="/" onClick={() => setOpen(false)}>
+//             <img
+//               src="/image/logo/LOGO.png"
+//               alt="Logo"
+//               className="h-14 md:h-16 lg:h-20 object-contain"
+//             />
+//           </NavLink>
+
+//           {/* DESKTOP MENU */}
+//           <ul className="hidden md:flex gap-8 items-center font-xl">
+//             <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
+//             <li><NavLink to="/about" className={navLinkClass}>About</NavLink></li>
+
+//             <li className="relative group">
+//               <NavLink to="/shop" className={navLinkClass}>
+//                 Category
+//               </NavLink>
+
+//               <ul className="absolute left-0 top-full pt-2 w-52 bg-white shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200">
+//                 {categories.map((cat) => (
+//                   <li key={cat}>
+//                     <NavLink
+//                       to={`/shop?category=${encodeURIComponent(cat)}`}
+//                       className="block px-4 py-2 hover:bg-gray-100"
+//                     >
+//                       {cat}
+//                     </NavLink>
+//                   </li>
+//                 ))}
+//               </ul>
+//             </li>
+
+//             <li><NavLink to="/orders" className={navLinkClass}>Orders</NavLink></li>
+//           </ul>
+
+//           {/* ICONS */}
+//           <div className="hidden md:flex items-center gap-6">
+
+//             <button onClick={() => setOpenSearch(true)}>
+//               <FiSearch size={22} />
+//             </button>
+
+//             <NavLink to="/wishlist">
+//               <FiHeart size={22} />
+//             </NavLink>
+
+//             <NavLink to="/cart" className="relative">
+//               <FiShoppingCart size={22} />
+//               {cartCount > 0 && (
+//                 <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] px-1 rounded-full">
+//                   {cartCount}
+//                 </span>
+//               )}
+//             </NavLink>
+
+//             {/* USER */}
+//             <NavLink to={user ? "/profile" : "/login"}>
+//               <FiUser size={22} />
+//             </NavLink>
+
+//             {/* 🔥 ADMIN (A circle) */}
+//             {isAdmin && (
+//               <NavLink
+//                 to="/admin"
+//                 className="w-9 h-9 flex items-center justify-center rounded-full bg-red-500 text-white font-bold text-sm hover:bg-red-600 transition"
+//               >
+//                 A
+//               </NavLink>
+//             )}
+
+//           </div>
+
+//           {/* MOBILE MENU BUTTON */}
+//           <button
+//             className="md:hidden text-2xl"
+//             onClick={() => setOpen(true)}
+//           >
+//             <FaBars />
+//           </button>
+//         </div>
+//       </nav>
+
+//       <div className="h-[90px]" />
+
+//       {/* MOBILE MENU */}
+//       <div
+//         className={`fixed top-0 left-0 h-full w-72 bg-white z-[99999] transform transition-transform ${
+//           open ? "translate-x-0" : "-translate-x-full"
+//         }`}
+//       >
+//         <div className="p-4 border-b flex justify-between">
+//           <FaTimes onClick={() => setOpen(false)} />
+//         </div>
+
+//         <ul className="flex flex-col p-4 gap-4">
+
+//           <NavLink to="/" onClick={() => setOpen(false)}>Home</NavLink>
+//           <NavLink to="/about" onClick={() => setOpen(false)}>About</NavLink>
+
+//           {/* 🔥 MOBILE ADMIN */}
+//           {isAdmin && (
+//             <NavLink
+//               to="/admin"
+//               onClick={() => setOpen(false)}
+//               className="w-10 h-10 flex items-center justify-center rounded-full bg-red-500 text-white font-bold"
+//             >
+//               A
+//             </NavLink>
+//           )}
+
+//           <NavLink to="/orders" onClick={() => setOpen(false)}>Orders</NavLink>
+//         </ul>
+//       </div>
+
+//       {/* SEARCH MODAL */}
+//       {openSearch && <SearchModal onClose={() => setOpenSearch(false)} />}
+//     </>
+//   );
+// }
+
+
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
 import {
   FiSearch,
   FiHeart,
   FiShoppingCart,
   FiUser,
+  FiMoreVertical,
 } from "react-icons/fi";
+import { FaTimes } from "react-icons/fa";
+
 import SearchModal from "./SearchModal";
 import BASE_URL from "../BASEURL";
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [categories, setCategories] = useState([]);
+
   const backendUrl = BASE_URL;
 
-  // ✅ USER + ADMIN LOAD
+  // AUTH
   useEffect(() => {
     const loadAuth = () => {
-      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-      const adminStatus = localStorage.getItem("isAdmin") === "true";
-
-      setUser(currentUser);
-      setIsAdmin(adminStatus);
+      setUser(JSON.parse(localStorage.getItem("currentUser")));
+      setIsAdmin(localStorage.getItem("isAdmin") === "true");
     };
 
     loadAuth();
-
     window.addEventListener("authChanged", loadAuth);
     return () => window.removeEventListener("authChanged", loadAuth);
   }, []);
 
-  // ✅ LOAD CATEGORIES
+  // CART
   useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        const res = await fetch(`${backendUrl}/api/category`);
-        const data = await res.json();
-        if (data?.success && Array.isArray(data.data)) {
-          setCategories(data.data.map((category) => category.name));
-        }
-      } catch (error) {
-        console.error("Failed to fetch categories:", error);
-      }
-    };
-
-    loadCategories();
-  }, []);
-
-  // ✅ CART COUNT
-  useEffect(() => {
-    const updateCounts = () => {
+    const update = () => {
       const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
-      const totalQty = cart.reduce(
-        (sum, item) => sum + Number(item.quantity || 0),
-        0
-      );
-      setCartCount(totalQty);
+      setCartCount(cart.reduce((a, b) => a + Number(b.quantity || 0), 0));
     };
 
-    updateCounts();
-    window.addEventListener("cartUpdated", updateCounts);
-
-    return () => window.removeEventListener("cartUpdated", updateCounts);
+    update();
+    window.addEventListener("cartUpdated", update);
+    return () => window.removeEventListener("cartUpdated", update);
   }, []);
 
-  // ✅ BODY SCROLL LOCK
+  // SCROLL LOCK
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "auto";
-    return () => (document.body.style.overflow = "auto");
-  }, [open]);
+    document.body.style.overflow = menuOpen ? "hidden" : "auto";
+  }, [menuOpen]);
 
   const navLinkClass = ({ isActive }) =>
     isActive
-      ? "text-black font-semibold border-b-2 border-black pb-1"
-      : "text-black hover:text-gray-700";
+      ? "font-semibold text-black border-b-2 border-black pb-1"
+      : "text-black";
 
   return (
     <>
-      {/* NAVBAR */}
-      <nav className="fixed top-0 left-0 w-full z-[99999] bg-white shadow-md">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      {/* TOP NAVBAR */}
+      <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-[999]">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
 
           {/* LOGO */}
-          <NavLink to="/" onClick={() => setOpen(false)}>
-            <img
-              src="/image/logo/LOGO.png"
-              alt="Logo"
-              className="h-14 md:h-16 lg:h-20 object-contain"
-            />
+          <NavLink to="/">
+            <img src="/image/logo/LOGO.png" className="h-12 md:h-16" />
           </NavLink>
 
           {/* DESKTOP MENU */}
-          <ul className="hidden md:flex gap-8 items-center font-xl">
+          <ul className="hidden md:flex gap-8">
             <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
             <li><NavLink to="/about" className={navLinkClass}>About</NavLink></li>
-
-            <li className="relative group">
-              <NavLink to="/shop" className={navLinkClass}>
-                Category
-              </NavLink>
-
-              <ul className="absolute left-0 top-full pt-2 w-52 bg-white shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200">
-                {categories.map((cat) => (
-                  <li key={cat}>
-                    <NavLink
-                      to={`/shop?category=${encodeURIComponent(cat)}`}
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      {cat}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </li>
-
+            <li><NavLink to="/shop" className={navLinkClass}>Category</NavLink></li>
             <li><NavLink to="/orders" className={navLinkClass}>Orders</NavLink></li>
           </ul>
 
-          {/* ICONS */}
-          <div className="hidden md:flex items-center gap-6">
-
+          {/* DESKTOP ICONS */}
+          <div className="hidden md:flex items-center gap-5">
             <button onClick={() => setOpenSearch(true)}>
               <FiSearch size={22} />
             </button>
@@ -144,63 +305,101 @@ export default function Navbar() {
               )}
             </NavLink>
 
-            {/* USER */}
             <NavLink to={user ? "/profile" : "/login"}>
               <FiUser size={22} />
             </NavLink>
-
-            {/* 🔥 ADMIN (A circle) */}
-            {isAdmin && (
-              <NavLink
-                to="/admin"
-                className="w-9 h-9 flex items-center justify-center rounded-full bg-red-500 text-white font-bold text-sm hover:bg-red-600 transition"
-              >
-                A
-              </NavLink>
-            )}
-
           </div>
 
-          {/* MOBILE MENU BUTTON */}
+          {/* MOBILE 3 DOT BUTTON */}
           <button
             className="md:hidden text-2xl"
-            onClick={() => setOpen(true)}
+            onClick={() => setMenuOpen(true)}
           >
-            <FaBars />
+            <FiMoreVertical />
           </button>
         </div>
       </nav>
 
-      <div className="h-[90px]" />
+      <div className="h-[70px]" />
+
+      {/* BACKDROP */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-[9998]"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
 
       {/* MOBILE MENU */}
       <div
-        className={`fixed top-0 left-0 h-full w-72 bg-white z-[99999] transform transition-transform ${
-          open ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 right-0 h-full w-72 bg-white z-[9999] transition-transform ${
+          menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="p-4 border-b flex justify-between">
-          <FaTimes onClick={() => setOpen(false)} />
+        <div className="flex justify-between items-center p-4 border-b">
+          <h2 className="font-semibold">Menu</h2>
+          <FaTimes onClick={() => setMenuOpen(false)} />
         </div>
 
-        <ul className="flex flex-col p-4 gap-4">
+        <div className="p-4 flex flex-col gap-3">
+          <NavLink onClick={() => setMenuOpen(false)} to="/" className="px-3 py-2 rounded bg-gray-100">
+            Home
+          </NavLink>
 
-          <NavLink to="/" onClick={() => setOpen(false)}>Home</NavLink>
-          <NavLink to="/about" onClick={() => setOpen(false)}>About</NavLink>
+          <NavLink onClick={() => setMenuOpen(false)} to="/about" className="px-3 py-2 rounded bg-gray-100">
+            About
+          </NavLink>
 
-          {/* 🔥 MOBILE ADMIN */}
+          <NavLink onClick={() => setMenuOpen(false)} to="/shop" className="px-3 py-2 rounded bg-gray-100">
+            Category
+          </NavLink>
+
+          <NavLink onClick={() => setMenuOpen(false)} to="/orders" className="px-3 py-2 rounded bg-gray-100">
+            Orders
+          </NavLink>
+
           {isAdmin && (
             <NavLink
               to="/admin"
-              onClick={() => setOpen(false)}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-red-500 text-white font-bold"
+              onClick={() => setMenuOpen(false)}
+              className="px-3 py-2 rounded bg-red-500 text-white text-center"
             >
-              A
+              Admin Panel
             </NavLink>
           )}
+        </div>
+      </div>
 
-          <NavLink to="/orders" onClick={() => setOpen(false)}>Orders</NavLink>
-        </ul>
+      {/* 🔥 MOBILE BOTTOM NAVBAR (FIXED & PERFECT) */}
+      <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t shadow-xl z-[9999] flex justify-around items-center py-2">
+
+        <NavLink to="/wishlist" className="flex flex-col items-center text-xs">
+          <FiHeart size={20} />
+          Wishlist
+        </NavLink>
+
+        <button
+          onClick={() => setOpenSearch(true)}
+          className="flex flex-col items-center text-xs"
+        >
+          <FiSearch size={20} />
+          Search
+        </button>
+
+        <NavLink to="/cart" className="relative flex flex-col items-center text-xs">
+          <FiShoppingCart size={20} />
+          Cart
+          {cartCount > 0 && (
+            <span className="absolute -top-1 right-2 bg-black text-white text-[9px] px-1 rounded-full">
+              {cartCount}
+            </span>
+          )}
+        </NavLink>
+
+        <NavLink to={user ? "/profile" : "/login"} className="flex flex-col items-center text-xs">
+          <FiUser size={20} />
+          Account
+        </NavLink>
       </div>
 
       {/* SEARCH MODAL */}
