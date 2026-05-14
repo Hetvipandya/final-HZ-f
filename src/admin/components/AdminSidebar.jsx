@@ -20,7 +20,7 @@ export default function AdminSidebar({ sidebarOpen, setSidebarOpen }) {
         />
       )}
 
-      <aside
+      <aside 
         className={`
           fixed md:static z-[9999]
           top-0 left-0 md:h-[100vh] h-full w-full md:w-64

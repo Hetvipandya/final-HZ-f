@@ -30,13 +30,15 @@ useEffect(() => {
         throw new Error("Failed to fetch orders");
       }
 
-      const formatted = data.orders.map((o) => ({
-        id: o._id,
-        date: new Date(o.createdAt).toLocaleString(),
-        status: o.status,
-        total: o.totalPrice,
-        items: o.products || [],
-      }));
+      const formatted = data.orders
+  .filter((o) => Number(o.totalPrice) > 0)
+  .map((o) => ({
+    id: o._id,
+    date: new Date(o.createdAt).toLocaleString(),
+    status: o.status,
+    total: o.totalPrice,
+    items: o.products || [],
+  }));
 
       setOrders(formatted);
     } catch (err) {

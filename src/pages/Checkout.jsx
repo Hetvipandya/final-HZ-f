@@ -15,7 +15,7 @@ export default function Checkout() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
+    phone: "", 
     address: "",
     city: "",
     pincode: "",
@@ -31,10 +31,12 @@ export default function Checkout() {
     return parts.join(", ");
   };
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+const total = cartItems.reduce((sum, item) => {
+  const itemPrice =
+    item.discountPrice ?? item.price ?? 0;
+
+  return sum + itemPrice * item.quantity;
+}, 0);
 
   // 🔥 FETCH SAVED ADDRESSES
 useEffect(() => {
@@ -342,20 +344,26 @@ ${cartItems
               </h3>
 
               <div className="space-y-4 mb-6">
-                {cartItems.map((item, index) => (
-                  <div
-                    key={item.id || index}
-                    className="flex justify-between text-sm"
-                  >
-                    <span>
-                      {item.name} x {item.quantity}
-                    </span>
-                    <span className="text-orange-400">
-                      ₹{item.price * item.quantity}
-                    </span>
-                  </div>
-                ))}
-              </div>
+  {cartItems.map((item, index) => {
+    const itemPrice =
+      item.discountPrice ?? item.price ?? 0;
+
+    return (
+      <div
+        key={item.id || index}
+        className="flex justify-between text-sm"
+      >
+        <span>
+          {item.name} x {item.quantity}
+        </span>
+
+        <span className="text-orange-400">
+          ₹{itemPrice * item.quantity}
+        </span>
+      </div>
+    );
+  })}
+</div>
 
               <div className="flex justify-between text-xl font-bold">
                 <span>Total</span>

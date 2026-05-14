@@ -12,7 +12,7 @@ export default function ProductCard({ product }) {
       background: "#1f2937",
       color: "#fff",
       borderRadius: "10px",
-    },
+    }, 
   };
 
   const goToDetail = () => {
@@ -43,45 +43,55 @@ export default function ProductCard({ product }) {
   };
 
   // 🛒 Cart
-  const addToCart = (e) => {
-    e.stopPropagation();
+// 🛒 Cart
+const addToCart = (e) => {
+  e.stopPropagation();
 
-    const user = JSON.parse(localStorage.getItem("currentUser"));
+  const user = JSON.parse(localStorage.getItem("currentUser"));
 
-    if (!user) {
-      toast.error("Please login first ❗", {
-        position: "top-center",
-        style: {
-          background: "#1f2937",
-          color: "#fff",
-          borderRadius: "10px",
-        },
-      });
-      navigate("/login");
-      return;
-    }
+  if (!user) {
+    toast.error("Please login first ❗", {
+      position: "top-center",
+      style: {
+        background: "#1f2937",
+        color: "#fff",
+        borderRadius: "10px",
+      },
+    });
+    navigate("/login");
+    return;
+  }
 
-    const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+  const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
 
-    const index = cart.findIndex((item) => item._id === product._id);
+  const index = cart.findIndex((item) => item._id === product._id);
 
-    if (index > -1) {
-      cart[index].quantity += 1;
-    } else {
-      cart.push({
-        _id: product._id,
-        name: product.productName,
-        price: product.price,
-        image: product.images?.[0] || product.image,
-        quantity: 1,
-      });
-    }
+  if (index > -1) {
+    cart[index].quantity += 1;
+  } else {
+    cart.push({
+      _id: product._id,
+      name: product.productName,
 
-    localStorage.setItem("cartItems", JSON.stringify(cart));
-    window.dispatchEvent(new Event("cartUpdated"));
+      // ✅ ORIGINAL PRICE
+      price: product.price,
 
-    toast.success("Added to cart 🛒", toastStyle);
-  };
+      // ✅ DISCOUNT PRICE
+      discountPrice:
+        product.discountPrice || product.price,
+
+      image: product.images?.[0] || product.image,
+
+      quantity: 1,
+    });
+  }
+
+  localStorage.setItem("cartItems", JSON.stringify(cart));
+
+  window.dispatchEvent(new Event("cartUpdated"));
+
+  toast.success("Added to cart 🛒", toastStyle);
+};
 
   const discount =
     product.price && product.discountPrice

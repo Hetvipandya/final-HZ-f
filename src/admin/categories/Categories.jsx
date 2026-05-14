@@ -57,8 +57,10 @@ export default function Categories() {
     }
   };
 
-  const statusBadge = (status) =>
-    "bg-green-100 text-green-700";
+const statusBadge = (status) =>
+  status
+    ? "bg-green-100 text-green-700"
+    : "bg-red-100 text-red-700";
 
   const fallbackImage =
     "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Crect width='100%25' height='100%25' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23717d7f' font-size='10'%3ENo Image%3C/text%3E%3C/svg%3E";
@@ -150,14 +152,14 @@ const getSafeImageSrc = (src) => {
                     </td>
                     <td className="p-3 font-semibold">{category.name}</td>
                     <td className="p-3">
-                      <span
-                        className={`px-3 py-1 rounded text-xs font-semibold ${statusBadge(
-                          category.status
-                        )}`}
-                      >
-                        {category.status}
-                      </span>
-                    </td>
+  <span
+    className={`px-3 py-1 rounded text-xs font-semibold ${statusBadge(
+      category.isActive
+    )}`}
+  >
+    {category.isActive ? "Active" : "Inactive"}
+  </span>
+</td>
                     <td className="p-3 text-center space-x-3">
                       <button
                         onClick={() => navigate(`/admin/categories/edit/${categoryId}`)}

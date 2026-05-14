@@ -5,7 +5,7 @@ import {
   FaMapMarkerAlt,
   FaReceipt,
   FaBox,
-  FaPhoneAlt,
+  FaPhoneAlt, 
   FaTrash,
 } from "react-icons/fa";
 import BASE_URL, { getImageUrl } from "../../BASEURL";
@@ -49,21 +49,43 @@ export default function OrderDetails() {
           status: o.status,
           total: o.totalPrice,
 
-          items: o.products.map((p) => {
-            const discountPrice = p.productId?.discountPrice;
-            const regularPrice = p.productId?.price;
-            const imageSource = p.productId?.images?.[0] || p.productId?.image;
+items: o.products.map((p) => {
 
-            return {
-              id: p.productId?._id,
-              name: p.productId?.productName || p.productId?.name || "Product",
-              price: discountPrice ?? regularPrice ?? 0,
-              quantity: p.quantity,
-              originalPrice: regularPrice,
-              discountPrice,
-              image: getOrderImageUrl(imageSource),
-            };
-          }),
+  const product = p.productId || {};
+
+  // ✅ FORCE DISCOUNT PRICE
+ const finalPrice =
+  Number(p.productId?.discountPrice) ||
+  Number(p.productId?.price) ||
+  0;
+
+  const originalPrice =
+    Number(product.price || 0);
+
+  const imageSource =
+    product.images?.[0] ||
+    product.image;
+
+  return {
+    id: product._id,
+
+    name:
+      product.productName ||
+      product.name ||
+      "Product",
+
+    // ✅ FINAL PRICE
+    price: finalPrice,
+
+    discountPrice: finalPrice,
+
+    originalPrice: originalPrice,
+
+    quantity: p.quantity,
+
+    image: getOrderImageUrl(imageSource),
+  };
+}),
 
           address: {
             name: o.address.fullName,
@@ -95,27 +117,68 @@ export default function OrderDetails() {
     setShowModal(true);
   };
 
-  const handleConfirm = async () => {
-    if (actionType === "order") {
-     await fetch(`${backendUrl}/api/order/${order.id}`, {
-  method: "DELETE",
-  
-});
-      navigate("/orders");
+const handleConfirm = async () => {
+
+  // CANCEL FULL ORDER
+  if (actionType === "order") {
+
+    await fetch(`${backendUrl}/api/order/${order.id}`, {
+      method: "DELETE",
+    });
+
+    navigate("/orders");
+  }
+
+  // REMOVE SINGLE ITEM
+ if (actionType === "item") {
+
+  try {
+
+    // ✅ REMOVE ITEM FROM BACKEND
+    const res = await fetch(
+      `${backendUrl}/api/order/${order.id}/remove-item`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: selectedItemId,
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    // ✅ ERROR HANDLE
+    if (!data.success) {
+      alert(data.message || "Failed to remove item");
+      return;
     }
 
-    if (actionType === "item") {
-      const updatedItems = order.items.filter(
-        (i, index) =>
-          (i.id || i._key || index) !== selectedItemId
-      );
+    // ✅ UPDATE FRONTEND STATE
+    setOrder((prev) => ({
+      ...prev,
 
+      // updated total from backend
+      total: data.order.totalPrice,
 
-      setOrder({ ...order, items: updatedItems });
-    }
+      // remove item from UI
+      items: prev.items.filter(
+        (item) => item.id !== selectedItemId
+      ),
+    }));
 
-    setShowModal(false);
-  };
+  } catch (err) {
+
+    console.error(err);
+
+    alert("Something went wrong");
+  }
+}
+
+  setShowModal(false);
+};
 
   return (
     <section className="py-10 md:py-16 bg-gradient-to-b from-[#FCFBFA] to-white min-h-screen">
@@ -189,16 +252,16 @@ export default function OrderDetails() {
                         Qty: {item.quantity}
                       </p>
                       <p className="text-orange-600 font-bold mt-1">
-                        ₹{item.price}
-                      </p>
-                      {item.discountPrice && item.originalPrice && item.originalPrice !== item.discountPrice && (
-                        <p className="text-sm text-gray-400 line-through">
-                          ₹{item.originalPrice}
-                        </p>
-                      )}
-                      <p className="text-gray-900 font-bold mt-1">
-                        Total: ₹{item.price * item.quantity}
-                      </p>
+  ₹{item.price}
+</p>
+                  {item.originalPrice > item.price && (
+  <p className="text-sm text-gray-400 line-through">
+    ₹{item.originalPrice}
+  </p>
+)}
+                    <p className="text-gray-900 font-bold mt-1">
+  Total: ₹{item.price * item.quantity}
+</p>
                     </div>
 
                     {order.status !== "Delivered" && (

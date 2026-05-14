@@ -16,7 +16,7 @@ export default function Cart() {
 
   const toastStyle = {
     position: "top-center",
-    style: {
+    style: { 
       background: "#374151",
       color: "#fff",
       borderRadius: "10px",
