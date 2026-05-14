@@ -80,7 +80,7 @@ window.dispatchEvent(new Event("authChanged"));
 toast.success("👑 Welcome Admin!");
 
 setTimeout(() => {
-  navigate("/");
+  navigate("/admin/dashboard");
 }, 500);
 
       return;
