@@ -525,13 +525,28 @@ export default function Profile() {
             </div>
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 px-4 py-2 rounded flex items-center gap-2"
-          >
-            <FaSignOutAlt />
-            Logout
-          </button>
+         <div className="flex items-center gap-3">
+
+  {/* ✅ BACK TO DASHBOARD (ONLY ADMIN) */}
+  {isAdmin && (
+    <button
+      onClick={() => navigate("/admin")}
+      className="bg-white text-black px-4 py-2 rounded flex items-center gap-2 font-medium"
+    >
+      ← Back to Dashboard
+    </button>
+  )}
+
+  {/* LOGOUT */}
+  <button
+    onClick={handleLogout}
+    className="bg-red-500 px-4 py-2 rounded flex items-center gap-2"
+  >
+    <FaSignOutAlt />
+    Logout
+  </button>
+
+</div>
         </div>
 
         {/* ================= ADDRESS SECTION ================= */}
@@ -674,7 +689,7 @@ function AddressForm({
                 })
               }
             />
-          ))}
+          ))} 
 
           <div className="flex justify-end gap-3 pt-3">
 

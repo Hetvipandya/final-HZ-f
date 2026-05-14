@@ -86,13 +86,20 @@ export default function Products() {
           Products
         </h2>
 
-        <Link
-          to="/admin/products/add"
-          className="bg-primary text-white px-4 py-2 rounded flex items-center gap-2 hover:opacity-90"
-        >
-          <FaPlus />
-          Add Product
-        </Link>
+      <Link
+  to="/admin/products/add"
+  className="bg-primary text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md flex items-center gap-1.5 sm:gap-2 hover:opacity-90 text-sm sm:text-base whitespace-nowrap"
+>
+  <FaPlus className="text-xs sm:text-sm" />
+
+  <span className="hidden xs:inline sm:inline">
+    Add Product
+  </span>
+
+  <span className="xs:hidden sm:hidden">
+    Add
+  </span>
+</Link>
       </div>
 
       {/* TABLE */}

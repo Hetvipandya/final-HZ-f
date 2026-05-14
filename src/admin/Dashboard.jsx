@@ -16,9 +16,9 @@ import {
 
 import { useEffect, useState } from "react";
 import BASE_URL from "../BASEURL";
+import { NavLink } from "react-router-dom";
 
 export default function Dashboard() {
-
   // =========================================
   // STATES
   // =========================================
@@ -26,7 +26,6 @@ export default function Dashboard() {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [users, setUsers] = useState([]);
-
   const [loading, setLoading] = useState(true);
 
   // =========================================
@@ -40,9 +39,6 @@ export default function Dashboard() {
     try {
       setLoading(true);
 
-      // =====================================
-      // API CALLS
-      // =====================================
       const [
         categoryRes,
         productRes,
@@ -55,33 +51,45 @@ export default function Dashboard() {
         fetch(`${BASE_URL}/api/auth/all`),
       ]);
 
-      // Parse responses
       const categoryData = await categoryRes.json();
       const productData = await productRes.json();
       const orderData = await orderRes.json();
       const userData = await userRes.json();
 
-      console.log("Category Response:", categoryData);
-      console.log("Product Response:", productData);
-      console.log("Order Response:", orderData);
-      console.log("User Response:", userData);
+      console.log("ORDER DATA:", orderData);
 
       // =====================================
-      // SET DATA - Extract arrays properly
+      // SAFE RESPONSE HANDLING
       // =====================================
-      const categoriesArray = Array.isArray(categoryData) ? categoryData : (categoryData?.data || []);
-      const productsArray = Array.isArray(productData) ? productData : (productData?.data || []);
-      const ordersArray = Array.isArray(orderData) ? orderData : (orderData?.data || []);
-      const usersArray = Array.isArray(userData) ? userData : (userData?.data || []);
+      setCategories(
+        Array.isArray(categoryData)
+          ? categoryData
+          : categoryData.data || []
+      );
 
-      setCategories(categoriesArray);
-      setProducts(productsArray);
-      setOrders(ordersArray);
-      setUsers(usersArray);
+      setProducts(
+        Array.isArray(productData)
+          ? productData
+          : productData.data || []
+      );
 
-    } catch (error) {
-      console.error("Dashboard Error:", error);
-      // Set empty arrays on error to prevent UI breaks
+      setOrders(
+        Array.isArray(orderData)
+          ? orderData
+          : orderData.orders ||
+              orderData.data ||
+              []
+      );
+
+      setUsers(
+        Array.isArray(userData)
+          ? userData
+          : userData.data || []
+      );
+
+    } catch (err) {
+      console.error("Dashboard Error:", err);
+
       setCategories([]);
       setProducts([]);
       setOrders([]);
@@ -92,90 +100,92 @@ export default function Dashboard() {
   };
 
   // =========================================
-  // ENSURE ARRAYS
+  // SAFE ARRAYS
   // =========================================
-  const ordersArray = Array.isArray(orders) ? orders : [];
-  const productsArray = Array.isArray(products) ? products : [];
-  const categoriesArray = Array.isArray(categories) ? categories : [];
+  const ordersArray = Array.isArray(orders)
+    ? orders
+    : [];
+
+  const productsArray = Array.isArray(products)
+    ? products
+    : [];
+
+  const categoriesArray = Array.isArray(categories)
+    ? categories
+    : [];
+
+  const usersArray = Array.isArray(users)
+    ? users
+    : [];
 
   // =========================================
-  // TOTAL REVENUE
+  // STATS
   // =========================================
   const totalRevenue = ordersArray.reduce(
-    (acc, item) => acc + Number(item.totalPrice || 0),
+    (acc, item) =>
+      acc + Number(item.totalPrice || 0),
     0
   );
 
-  // =========================================
-  // PENDING ORDERS
-  // =========================================
   const pendingOrders = ordersArray.filter(
     (item) => item.status === "Pending"
   );
 
-  // =========================================
-  // BEST SELLERS
-  // =========================================
-  const bestSellerProducts = productsArray.filter(
-    (item) => item.isBestSeller
-  );
+  const bestSellerProducts =
+    productsArray.filter(
+      (item) => item.isBestSeller
+    );
 
   // =========================================
-  // SALE PRODUCTS
-  // =========================================
-  const saleProducts = productsArray.filter(
-    (item) => item.isSale
-  );
-
-  // =========================================
-  // LOW STOCK DUMMY
-  // =========================================
-  const lowStockProducts = productsArray.slice(0, 5);
-
-  // =========================================
-  // ORDER STATUS CHART
+  // CHART DATA
   // =========================================
   const orderStatusData = [
     {
       name: "Pending",
-      value: ordersArray.filter((o) => o.status === "Pending").length,
+      value: ordersArray.filter(
+        (o) => o.status === "Pending"
+      ).length,
     },
     {
       name: "Delivered",
-      value: ordersArray.filter((o) => o.status === "Delivered").length,
+      value: ordersArray.filter(
+        (o) => o.status === "Delivered"
+      ).length,
     },
     {
       name: "Cancelled",
-      value: ordersArray.filter((o) => o.status === "Cancelled").length,
+      value: ordersArray.filter(
+        (o) => o.status === "Cancelled"
+      ).length,
     },
   ];
 
-  // =========================================
-  // CATEGORY CHART
-  // =========================================
-  const categoryChartData = categoriesArray.map((cat) => ({
-    name: cat.name,
-    products: productsArray.filter(
-      (p) => p.categoryId === cat._id
-    ).length,
-  }));
+  const categoryChartData =
+    categoriesArray.map((cat) => ({
+      name: cat.name,
+      products: productsArray.filter(
+        (p) =>
+          p.categoryId?._id === cat._id ||
+          p.categoryId === cat._id
+      ).length,
+    }));
 
-  // =========================================
-  // SALES CHART
-  // =========================================
-  const salesChartData = ordersArray.map((order, index) => ({
-    name: `Order ${index + 1}`,
-    amount: order.totalPrice,
-  }));
+  const salesChartData = ordersArray.map(
+    (o, i) => ({
+      name: `O${i + 1}`,
+      amount: Number(
+        o.totalPrice || 0
+      ),
+    })
+  );
 
   // =========================================
   // COLORS
   // =========================================
   const COLORS = [
     "#f97316",
-    "#fb923c",
-    "#fdba74",
-    "#ea580c",
+    "#22c55e",
+    "#ef4444",
   ];
 
   // =========================================
@@ -184,7 +194,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center bg-orange-50">
-        <h1 className="text-3xl font-bold text-orange-500">
+        <h1 className="text-2xl font-bold text-orange-500">
           Loading Dashboard...
         </h1>
       </div>
@@ -192,17 +202,17 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-orange-50 p-6">
+    <div className="min-h-screen bg-orange-50 p-3 sm:p-5 lg:p-6">
 
       {/* ===================================== */}
       {/* HEADER */}
       {/* ===================================== */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-orange-600">
+      <div className="mb-6">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-orange-600">
           Admin Dashboard
         </h1>
 
-        <p className="text-gray-600 mt-2">
+        <p className="text-gray-500 mt-1 text-sm sm:text-base">
           Live Database Analytics
         </p>
       </div>
@@ -210,408 +220,526 @@ export default function Dashboard() {
       {/* ===================================== */}
       {/* STATS */}
       {/* ===================================== */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
 
-        <div className="bg-white rounded-2xl shadow-sm p-5 border border-orange-100">
-          <p className="text-sm text-gray-500">
-            Categories
-          </p>
+        {[
+          [
+            "Categories",
+            categoriesArray.length,
+          ],
+          [
+            "Products",
+            productsArray.length,
+          ],
+          [
+            "Orders",
+            ordersArray.length,
+          ],
+          [
+            "Users",
+            usersArray.length,
+          ],
+          [
+            "Pending",
+            pendingOrders.length,
+          ],
+          [
+            "Revenue",
+            `₹${totalRevenue}`,
+          ],
+        ].map(([label, value], i) => (
+          <div
+            key={i}
+            className="bg-white rounded-2xl shadow-sm border border-orange-100 p-4"
+          >
+            <p className="text-gray-500 text-xs sm:text-sm">
+              {label}
+            </p>
 
-          <h2 className="text-3xl font-bold text-orange-500 mt-2">
-            {categoriesArray.length}
-          </h2>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm p-5 border border-orange-100">
-          <p className="text-sm text-gray-500">
-            Products
-          </p>
-
-          <h2 className="text-3xl font-bold text-orange-500 mt-2">
-            {productsArray.length}
-          </h2>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm p-5 border border-orange-100">
-          <p className="text-sm text-gray-500">
-            Orders
-          </p>
-
-          <h2 className="text-3xl font-bold text-orange-500 mt-2">
-            {ordersArray.length}
-          </h2>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm p-5 border border-orange-100">
-          <p className="text-sm text-gray-500">
-            Users
-          </p>
-
-          <h2 className="text-3xl font-bold text-orange-500 mt-2">
-            {users.length}
-          </h2>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm p-5 border border-orange-100">
-          <p className="text-sm text-gray-500">
-            Pending Orders
-          </p>
-
-          <h2 className="text-3xl font-bold text-orange-500 mt-2">
-            {pendingOrders.length}
-          </h2>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm p-5 border border-orange-100">
-          <p className="text-sm text-gray-500">
-            Revenue
-          </p>
-
-          <h2 className="text-3xl font-bold text-orange-500 mt-2">
-            ₹{totalRevenue}
-          </h2>
-        </div>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500 mt-2 break-words">
+              {value}
+            </h2>
+          </div>
+        ))}
 
       </div>
 
       {/* ===================================== */}
       {/* CHARTS */}
       {/* ===================================== */}
-      <div className="grid lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6">
 
-        {/* SALES */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm">
+        {/* SALES CHART */}
+        <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-5">
 
-          <h2 className="text-xl font-semibold text-orange-500 mb-5">
+          <h2 className="text-lg sm:text-xl font-semibold text-orange-500 mb-4">
             Sales Analytics
           </h2>
 
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={salesChartData}>
-              <CartesianGrid strokeDasharray="3 3" />
+          <div className="w-full h-[260px] sm:h-[320px]">
 
-              <XAxis dataKey="name" />
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+            >
+              <LineChart
+                data={salesChartData}
+                margin={{
+                  top: 10,
+                  right: 10,
+                  left: -15,
+                  bottom: 0,
+                }}
+              >
 
-              <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
 
-              <Tooltip />
+                <XAxis
+                  dataKey="name"
+                  tick={{ fontSize: 12 }}
+                />
 
-              <Line
-                type="monotone"
-                dataKey="amount"
-                stroke="#f97316"
-                strokeWidth={4}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+                <YAxis
+                  tick={{ fontSize: 12 }}
+                />
+
+                <Tooltip />
+
+                <Line
+                  type="monotone"
+                  dataKey="amount"
+                  stroke="#f97316"
+                  strokeWidth={3}
+                  dot={{ r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+
+              </LineChart>
+            </ResponsiveContainer>
+
+          </div>
         </div>
 
         {/* ORDER STATUS */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm">
+        <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-5">
 
-          <h2 className="text-xl font-semibold text-orange-500 mb-5">
+          <h2 className="text-lg sm:text-xl font-semibold text-orange-500 mb-4">
             Order Status
           </h2>
 
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
+          <div className="w-full h-[260px] sm:h-[320px]">
 
-              <Pie
-                data={orderStatusData}
-                dataKey="value"
-                outerRadius={100}
-                label
-              >
-                {orderStatusData.map((_, index) => (
-                  <Cell
-                    key={index}
-                    fill={COLORS[index]}
-                  />
-                ))}
-              </Pie>
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+            >
 
-              <Tooltip />
+              <PieChart>
 
-              <Legend />
+                <Pie
+                  data={orderStatusData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius="75%"
+                  label
+                >
 
-            </PieChart>
-          </ResponsiveContainer>
+                  {orderStatusData.map(
+                    (_, index) => (
+                      <Cell
+                        key={index}
+                        fill={
+                          COLORS[
+                            index %
+                              COLORS.length
+                          ]
+                        }
+                      />
+                    )
+                  )}
+
+                </Pie>
+
+                <Tooltip />
+
+                <Legend
+                  verticalAlign="bottom"
+                  height={36}
+                />
+
+              </PieChart>
+
+            </ResponsiveContainer>
+
+          </div>
         </div>
       </div>
 
       {/* ===================================== */}
       {/* CATEGORY + BEST SELLERS */}
       {/* ===================================== */}
-      <div className="grid lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6">
 
         {/* CATEGORY CHART */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm">
+        <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-5">
 
-          <h2 className="text-xl font-semibold text-orange-500 mb-5">
+          <h2 className="text-lg sm:text-xl font-semibold text-orange-500 mb-4">
             Category Products
           </h2>
 
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={categoryChartData}>
+          <div className="w-full h-[260px] sm:h-[320px]">
 
-              <CartesianGrid strokeDasharray="3 3" />
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+            >
 
-              <XAxis dataKey="name" />
+              <BarChart
+                data={categoryChartData}
+                margin={{
+                  top: 10,
+                  right: 10,
+                  left: -15,
+                  bottom: 10,
+                }}
+              >
 
-              <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
 
-              <Tooltip />
+                <XAxis
+                  dataKey="name"
+                  tick={{ fontSize: 12 }}
+                />
 
-              <Bar
-                dataKey="products"
-                fill="#f97316"
-                radius={[10, 10, 0, 0]}
-              />
+                <YAxis
+                  tick={{ fontSize: 12 }}
+                />
 
-            </BarChart>
-          </ResponsiveContainer>
+                <Tooltip />
+
+                <Bar
+                  dataKey="products"
+                  fill="#f97316"
+                  radius={[8, 8, 0, 0]}
+                />
+
+              </BarChart>
+
+            </ResponsiveContainer>
+
+          </div>
         </div>
 
         {/* BEST SELLERS */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm">
+        <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-5">
 
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-xl font-semibold text-orange-500">
-              Best Seller Products
+          <div className="flex items-center justify-between mb-4">
+
+            <h2 className="text-lg sm:text-xl font-semibold text-orange-500">
+              Best Sellers
             </h2>
 
-            <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition">
-              + Add Product
+            <button className="bg-orange-500 hover:bg-orange-600 transition text-white text-sm px-3 py-2 rounded-lg">
+              + Add
             </button>
+
           </div>
 
-          {bestSellerProducts.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">No best seller products available</p>
-          ) : (
-            <div className="space-y-4 max-h-[300px] overflow-auto">
+          <div className="max-h-[320px] overflow-y-auto space-y-3 pr-1">
 
-              {bestSellerProducts.map((product) => (
+            {bestSellerProducts.length ===
+            0 ? (
+              <p className="text-gray-500 text-center py-10">
+                No Best Seller Products
+              </p>
+            ) : (
+              bestSellerProducts.map((p) => (
                 <div
-                  key={product._id}
-                  className="border border-orange-100 rounded-xl p-4 hover:bg-orange-50 transition"
+                  key={p._id}
+                  className="border border-orange-100 rounded-xl p-3 hover:bg-orange-50 transition"
                 >
-                  <div className="flex justify-between">
 
-                    <div>
-                      <h3 className="font-semibold text-gray-800">
-                        {product.productName || 'N/A'}
-                      </h3>
+                  <div className="flex items-center justify-between gap-3">
 
-                      <p className="text-sm text-gray-500">
-                        ₹{product.discountPrice || product.price || 0}
-                      </p>
+                    <div className="flex items-center gap-3 min-w-0">
+
+                      <img
+                        src={
+                          p.images?.[0] ||
+                          p.image ||
+                          "https://via.placeholder.com/60"
+                        }
+                        alt={p.productName}
+                        className="w-14 h-14 rounded-lg object-cover"
+                      />
+
+                      <div className="min-w-0">
+
+                        <h3 className="font-semibold text-sm sm:text-base truncate">
+                          {p.productName}
+                        </h3>
+
+                        <p className="text-orange-500 font-medium text-sm">
+                          ₹{p.price}
+                        </p>
+
+                      </div>
+
                     </div>
 
-                    <div className="flex gap-2">
-
-                      <button className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-lg text-sm transition">
-                        Edit
-                      </button>
-
-                      <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition">
-                        Delete
-                      </button>
-
-                    </div>
+                    <button className="bg-orange-500 hover:bg-orange-600 text-white text-xs sm:text-sm px-3 py-2 rounded-lg transition">
+                      Edit
+                    </button>
 
                   </div>
+
                 </div>
+              ))
+            )}
+
+          </div>
+        </div>
+      </div>
+
+      {/* ===================================== */}
+      {/* PRODUCTS TABLE */}
+      {/* ===================================== */}
+      <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-5 mb-6">
+
+        <h2 className="text-lg sm:text-xl font-semibold text-orange-500 mb-4">
+          Products
+        </h2>
+
+        <div className="overflow-x-auto">
+
+          <table className="min-w-[750px] w-full">
+
+            <thead className="bg-orange-100 text-orange-700">
+
+              <tr>
+                <th className="p-3 text-left">
+                  Image
+                </th>
+
+                <th className="p-3 text-left">
+                  Product
+                </th>
+
+                <th className="p-3 text-left">
+                  Price
+                </th>
+
+                <th className="p-3 text-left">
+                  Rating
+                </th>
+
+                <th className="p-3 text-left">
+                  Sale
+                </th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {productsArray.map((p) => (
+
+                <tr
+                  key={p._id}
+                  className="border-b hover:bg-orange-50"
+                >
+
+                  <td className="p-3">
+
+                    <img
+                      src={
+                        p.images?.[0] ||
+                        p.image ||
+                        "https://via.placeholder.com/60"
+                      }
+                      alt={p.productName}
+                      className="w-14 h-14 rounded-lg object-cover"
+                    />
+
+                  </td>
+
+                  <td className="p-3 font-medium">
+                    {p.productName}
+                  </td>
+
+                  <td className="p-3">
+                    ₹{p.price}
+                  </td>
+
+                  <td className="p-3">
+                    ⭐ {p.rating || 0}
+                  </td>
+
+                  <td className="p-3">
+
+                    {p.isSale ? (
+                      <span className="bg-green-100 text-green-600 text-xs px-3 py-1 rounded-full">
+                        SALE
+                      </span>
+                    ) : (
+                      <span className="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full">
+                        NORMAL
+                      </span>
+                    )}
+
+                  </td>
+
+                </tr>
+
               ))}
 
-            </div>
-          )}
+            </tbody>
+
+          </table>
 
         </div>
       </div>
 
       {/* ===================================== */}
-      {/* PRODUCTS */}
+      {/* ORDERS TABLE */}
       {/* ===================================== */}
-      <div className="bg-white rounded-2xl p-5 shadow-sm mb-8">
+     {/* ===================================== */}
+{/* ORDERS TABLE */}
+{/* ===================================== */}
+<div className="bg-white rounded-2xl shadow-sm p-4 sm:p-5">
 
-        <h2 className="text-2xl font-semibold text-orange-500 mb-5">
-          All Products
-        </h2>
+  <div className="flex items-center justify-between mb-4">
 
-        {productsArray.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">No products available</p>
+    <h2 className="text-lg sm:text-xl font-semibold text-orange-500">
+      Latest Pending Orders
+    </h2>
+
+    <NavLink
+      to="/admin/orders"
+      className="bg-orange-500 hover:bg-orange-600 transition text-white px-4 py-2 rounded-xl text-sm font-medium"
+    >
+      View All
+    </NavLink>
+
+  </div>
+
+  <div className="overflow-x-auto">
+
+    <table className="min-w-[700px] w-full">
+
+      <thead className="bg-orange-100 text-orange-700">
+
+        <tr>
+
+          <th className="p-3 text-left">
+            Order ID
+          </th>
+
+          <th className="p-3 text-left">
+            Customer
+          </th>
+
+          <th className="p-3 text-left">
+            Amount
+          </th>
+
+          <th className="p-3 text-left">
+            Payment
+          </th>
+
+          <th className="p-3 text-left">
+            Status
+          </th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        {ordersArray
+          .filter(
+            (o) => o.status === "Pending"
+          )
+          .sort(
+            (a, b) =>
+              new Date(b.createdAt) -
+              new Date(a.createdAt)
+          )
+          .slice(0, 6).length === 0 ? (
+
+          <tr>
+
+            <td
+              colSpan="5"
+              className="text-center p-5 text-gray-500"
+            >
+              No Pending Orders Found
+            </td>
+
+          </tr>
+
         ) : (
-          <div className="overflow-auto">
 
-            <table className="w-full">
+          ordersArray
+            .filter(
+              (o) =>
+                o.status === "Pending"
+            )
+            .sort(
+              (a, b) =>
+                new Date(b.createdAt) -
+                new Date(a.createdAt)
+            )
+            .slice(0, 6)
+            .map((o) => (
 
-              <thead className="bg-orange-100 text-orange-700">
+              <tr
+                key={o._id}
+                className="border-b hover:bg-orange-50"
+              >
 
-                <tr>
-                  <th className="p-3 text-left">Image</th>
-                  <th className="p-3 text-left">Product</th>
-                  <th className="p-3 text-left">Price</th>
-                  <th className="p-3 text-left">Discount</th>
-                  <th className="p-3 text-left">Rating</th>
-                  <th className="p-3 text-left">Sale</th>
-                  <th className="p-3 text-left">Actions</th>
-                </tr>
+                <td className="p-3">
+                  {o._id?.slice(0, 8)}
+                </td>
 
-              </thead>
+                <td className="p-3">
+                  {o.userId?.name ||
+                    "Unknown"}
+                </td>
 
-              <tbody>
+                <td className="p-3">
+                  ₹{o.totalPrice || 0}
+                </td>
 
-                {productsArray.map((product) => (
+                <td className="p-3">
+                  {o.paymentMethod ||
+                    "N/A"}
+                </td>
 
-                  <tr
-                    key={product._id}
-                    className="border-b hover:bg-orange-50"
-                  >
+                <td className="p-3">
 
-                    <td className="p-3">
+                  <span className="text-xs px-3 py-1 rounded-full bg-yellow-100 text-yellow-700">
+                    {o.status || "Pending"}
+                  </span>
 
-                      <img
-                        src={
-                          product.images?.[0] ||
-                          product.image ||
-                          'https://via.placeholder.com/56'
-                        }
-                        alt={product.productName || 'Product'}
-                        className="w-14 h-14 rounded-lg object-cover"
-                        onError={(e) => e.target.src = 'https://via.placeholder.com/56'}
-                      />
+                </td>
 
-                    </td>
+              </tr>
 
-                    <td className="p-3 font-semibold">
-                      {product.productName || 'N/A'}
-                    </td>
+            ))
 
-                    <td className="p-3">
-                      ₹{product.price || 0}
-                    </td>
-
-                    <td className="p-3">
-                      ₹
-                      {product.discountPrice ||
-                        product.price ||
-                        0}
-                    </td>
-
-                    <td className="p-3">
-                      ⭐ {product.rating || 0}
-                    </td>
-
-                    <td className="p-3">
-
-                      {product.isSale ? (
-                        <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-xs">
-                          ON SALE
-                        </span>
-                      ) : (
-                        <span className="bg-gray-100 text-gray-500 px-3 py-1 rounded-full text-xs">
-                          NORMAL
-                        </span>
-                      )}
-
-                    </td>
-
-                    <td className="p-3 flex gap-2">
-
-                      <button className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-lg text-sm">
-                        Edit
-                      </button>
-
-                      <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm">
-                        Delete
-                      </button>
-
-                    </td>
-
-                  </tr>
-
-                ))}
-
-              </tbody>
-
-            </table>
-
-          </div>
         )}
-      </div>
 
-      {/* ===================================== */}
-      {/* ORDERS */}
-      {/* ===================================== */}
-      <div className="bg-white rounded-2xl p-5 shadow-sm">
+      </tbody>
 
-        <h2 className="text-2xl font-semibold text-orange-500 mb-5">
-          Latest Orders
-        </h2>
+    </table>
 
-        {ordersArray.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">No orders available</p>
-        ) : (
-          <div className="overflow-auto">
+  </div>
 
-            <table className="w-full">
-
-              <thead className="bg-orange-100 text-orange-700">
-
-                <tr>
-                  <th className="p-3 text-left">Order ID</th>
-                  <th className="p-3 text-left">User</th>
-                  <th className="p-3 text-left">Amount</th>
-                  <th className="p-3 text-left">Payment</th>
-                  <th className="p-3 text-left">Status</th>
-                </tr>
-
-              </thead>
-
-              <tbody>
-
-                {ordersArray.map((order) => (
-
-                  <tr
-                    key={order._id}
-                    className="border-b hover:bg-orange-50"
-                  >
-
-                    <td className="p-3">
-                      {order._id?.slice(0, 8) || 'N/A'}
-                    </td>
-
-                    <td className="p-3">
-                      {order.userId || 'N/A'}
-                    </td>
-
-                    <td className="p-3">
-                      ₹{order.totalPrice || 0}
-                    </td>
-
-                    <td className="p-3">
-                      {order.paymentMethod || 'N/A'}
-                    </td>
-
-                    <td className="p-3">
-
-                      <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs">
-                        {order.status || 'Pending'}
-                      </span>
-
-                    </td>
-
-                  </tr>
-
-                ))}
-
-              </tbody>
-
-            </table>
-
-          </div>
-        )}
-      </div>
+</div>
 
     </div>
   );

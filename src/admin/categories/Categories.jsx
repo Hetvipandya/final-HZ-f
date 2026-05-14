@@ -100,11 +100,14 @@ const getSafeImageSrc = (src) => {
           Categories
         </h2>
 
-        <Link to="/admin/categories/add"
-          className="bg-primary text-white px-4 py-2 rounded flex items-center gap-2"
-        >
-          <FaPlus /> Add Category
-        </Link>
+<Link
+  to="/admin/categories/add"
+  className="bg-primary text-white px-3 md:px-4 py-1.5 md:py-2 rounded flex items-center gap-1 md:gap-2 text-sm md:text-base"
+>
+  <FaPlus className="text-xs md:text-sm" />
+  <span className="hidden sm:inline">Add Category</span>
+  <span className="sm:hidden">Add</span>
+</Link>
       </div>
 
       {error ? (
