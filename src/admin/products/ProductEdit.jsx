@@ -4,7 +4,7 @@ import {
   FaBoxOpen,
   FaTag,
   FaImage,
-  FaAlignLeft,
+  FaAlignLeft, 
   FaStar,
 } from "react-icons/fa";
 import BASE_URL, { getImageUrl } from "../../BASEURL";
