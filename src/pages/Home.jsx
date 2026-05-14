@@ -163,17 +163,7 @@ export default function Home() {
     fetchData();
   }, []);
 
-  const popularProducts = products.filter((item) => {
-    const name = item.name?.toLowerCase() || "";
-    const category = item.category?.toLowerCase() || "";
-
-    return (
-      name.includes("lotus") ||
-      name.includes("rath") ||
-      name.includes("book") ||
-      category.includes("kamal kalp yantra")
-    );
-  }).slice(0, 4);
+  const popularProducts = products.slice(0, 4);
 
   return (
     <div className="bg-white">
