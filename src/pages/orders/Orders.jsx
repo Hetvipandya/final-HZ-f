@@ -5,7 +5,7 @@ import {
   FaChevronRight,
   FaRegClock,
   FaTruck,
-} from "react-icons/fa";
+} from "react-icons/fa"; 
 import { client } from "../../lib/sanity";
 import BASE_URL from "../../BASEURL";
 

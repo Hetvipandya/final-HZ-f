@@ -24,7 +24,7 @@ const normalizeOrder = (order) => ({
       qty: item.quantity || item.qty || 0,
       price: item.productId?.price || item.price || 0,
     })) || order.items || [],
-});
+}); 
 
 const parseOrderResponse = (data) => {
   if (!data) return [];
