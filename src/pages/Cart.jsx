@@ -16,23 +16,34 @@ export default function Cart() {
 
   const toastStyle = {
     position: "top-center",
-    style: { 
+    style: {  
       background: "#374151",
       color: "#fff",
       borderRadius: "10px",
     },
   };
 
+  // 🔥 GET USER-SPECIFIC CART KEY
+  const getCartKey = () => {
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    if (user?.email) {
+      return `cartItems_${user.email}`;
+    }
+    return "cartItems_guest"; // For non-logged-in users
+  };
+
   // LOAD CART
   useEffect(() => {
+    const cartKey = getCartKey();
     const stored =
-      JSON.parse(localStorage.getItem("cartItems")) || [];
+      JSON.parse(localStorage.getItem(cartKey)) || [];
     setCartItems(stored);
   }, []);
 
   // SAVE CART
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    const cartKey = getCartKey();
+    localStorage.setItem(cartKey, JSON.stringify(cartItems));
     window.dispatchEvent(new Event("cartUpdated"));
   }, [cartItems]);
 
@@ -66,7 +77,8 @@ export default function Cart() {
     const updated = cartItems.filter((item) => item._id !== id);
 
     setCartItems(updated);
-    localStorage.setItem("cartItems", JSON.stringify(updated));
+    const cartKey = getCartKey();
+    localStorage.setItem(cartKey, JSON.stringify(updated));
 
     toast.success("Item removed ❌", toastStyle);
   };

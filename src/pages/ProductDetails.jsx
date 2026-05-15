@@ -114,8 +114,11 @@ export default function ProductDetails() {
       return;
     }
 
+    // 🔥 GET USER-SPECIFIC CART KEY
+    const cartKey = `cartItems_${currentUser.email}`;
+
     const cart =
-      JSON.parse(localStorage.getItem("cartItems")) || [];
+      JSON.parse(localStorage.getItem(cartKey)) || [];
 
     const itemIndex = cart.findIndex(
       (item) => item._id === product._id
@@ -145,7 +148,7 @@ export default function ProductDetails() {
     }
 
     localStorage.setItem(
-      "cartItems",
+      cartKey,
       JSON.stringify(cart)
     );
 

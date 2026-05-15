@@ -43,7 +43,6 @@ export default function ProductCard({ product }) {
   };
 
   // 🛒 Cart
-// 🛒 Cart
 const addToCart = (e) => {
   e.stopPropagation();
 
@@ -62,7 +61,10 @@ const addToCart = (e) => {
     return;
   }
 
-  const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+  // 🔥 GET USER-SPECIFIC CART KEY
+  const cartKey = `cartItems_${user.email}`;
+
+  const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
 
   const index = cart.findIndex((item) => item._id === product._id);
 
@@ -86,7 +88,7 @@ const addToCart = (e) => {
     });
   }
 
-  localStorage.setItem("cartItems", JSON.stringify(cart));
+  localStorage.setItem(cartKey, JSON.stringify(cart));
 
   window.dispatchEvent(new Event("cartUpdated"));
 

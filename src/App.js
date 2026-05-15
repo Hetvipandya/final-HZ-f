@@ -153,8 +153,7 @@ import CouponAdd from "./admin/coupons/CouponAdd";
 import CouponEdit from "./admin/coupons/CouponEdit";
 import ReturnsRefunds from "./admin/returns/ReturnsRefunds";
 import Payments from "./admin/payments/Payments";
-import Reviews from "./admin/reviews/Reviews";
-
+import Reviews from "./admin/reviews/Reviews";import UserCarts from "./admin/carts/UserCarts";
 function App() {
   return (
     <BrowserRouter>
@@ -204,6 +203,7 @@ function App() {
 
           <Route path="orders" element={<AdminOrders />} />
           <Route path="users" element={<Users />} />
+          <Route path="carts" element={<UserCarts />} />
 
           <Route path="categories" element={<Categories />} />
           <Route path="categories/add" element={<CategoryAdd />} />

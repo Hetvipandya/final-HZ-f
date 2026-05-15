@@ -24,7 +24,10 @@ export default function Checkout() {
   const [savedAddresses, setSavedAddresses] = useState([]);
   const [selectedKey, setSelectedKey] = useState(null);
 
-  const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+  // 🔥 GET USER-SPECIFIC CART KEY
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const cartKey = user?.email ? `cartItems_${user.email}` : "cartItems_guest";
+  const cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
 
   const formatSavedAddress = (addr) => {
     const parts = [addr.houseNo, addr.area, addr.city, addr.state, addr.pincode].filter(Boolean);
@@ -177,8 +180,10 @@ const handlePlaceOrder = async (e) => {
       throw new Error(data.message || "Order failed");
     }
 
-    // 🟢 CLEAR CART
-    localStorage.removeItem("cartItems");
+    // 🟢 CLEAR USER-SPECIFIC CART
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const userCartKey = currentUser?.email ? `cartItems_${currentUser.email}` : "cartItems_guest";
+    localStorage.removeItem(userCartKey);
     window.dispatchEvent(new Event("cartUpdated"));
 
     // 🟢 WHATSAPP MESSAGE

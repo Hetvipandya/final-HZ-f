@@ -479,6 +479,10 @@ export default function Profile() {
     localStorage.removeItem("currentUser");
     localStorage.removeItem("isAdmin");
 
+    // 🔥 DISPATCH EVENTS TO UPDATE NAVBAR AND CART
+    window.dispatchEvent(new Event("authChanged"));
+    window.dispatchEvent(new Event("cartUpdated"));
+
     navigate("/login");
   };
 

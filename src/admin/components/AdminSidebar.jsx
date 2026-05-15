@@ -203,7 +203,9 @@ export default function AdminSidebar({
               localStorage.removeItem("currentUser");
               localStorage.removeItem("isAdmin");
 
+              // 🔥 DISPATCH EVENTS TO UPDATE NAVBAR AND CART
               window.dispatchEvent(new Event("authChanged"));
+              window.dispatchEvent(new Event("cartUpdated"));
 
               setSidebarOpen(false);
             }}

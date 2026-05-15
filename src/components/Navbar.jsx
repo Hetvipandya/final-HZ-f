@@ -245,17 +245,27 @@ export default function Navbar() {
     return () => window.removeEventListener("authChanged", loadAuth);
   }, []);
 
+  // 🔥 GET USER-SPECIFIC CART KEY
+  const getCartKey = (userData) => {
+    if (userData?.email) {
+      return `cartItems_${userData.email}`;
+    }
+    return "cartItems_guest";
+  };
+
   // CART
   useEffect(() => {
     const update = () => {
-      const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      const cartKey = getCartKey(currentUser);
+      const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
       setCartCount(cart.reduce((a, b) => a + Number(b.quantity || 0), 0));
     };
 
     update();
     window.addEventListener("cartUpdated", update);
     return () => window.removeEventListener("cartUpdated", update);
-  }, []);
+  }, [user]);
 
   // SCROLL LOCK
   useEffect(() => {

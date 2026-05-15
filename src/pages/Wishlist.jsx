@@ -197,8 +197,19 @@ export default function Wishlist() {
 
   // 🛒 MOVE TO CART
   const moveToCart = (product) => {
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+
+    if (!user) {
+      toast.error("Please login first ❗", topToast);
+      navigate("/login");
+      return;
+    }
+
+    // 🔥 GET USER-SPECIFIC CART KEY
+    const cartKey = `cartItems_${user.email}`;
+
     const cart =
-      JSON.parse(localStorage.getItem("cartItems")) || [];
+      JSON.parse(localStorage.getItem(cartKey)) || [];
 
     const index = cart.findIndex((item) => item._id === product._id);
 
@@ -214,7 +225,7 @@ export default function Wishlist() {
       });
     }
 
-    localStorage.setItem("cartItems", JSON.stringify(cart));
+    localStorage.setItem(cartKey, JSON.stringify(cart));
 
     // remove from wishlist
     const updated = wishlistItems.filter((i) => i._id !== product._id);
