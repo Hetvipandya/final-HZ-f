@@ -22,6 +22,7 @@ export default function ProductDetails() {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [mainImage, setMainImage] = useState("");
+  const [expandedDescription, setExpandedDescription] = useState(false);
 
   const backendUrl = BASE_URL;
 
@@ -104,62 +105,62 @@ export default function ProductDetails() {
   }, []);
 
   // ADD TO CART
-  const addToCart = () => {
-    const currentUser = JSON.parse(
-      localStorage.getItem("currentUser")
-    );
+const addToCart = () => {
+  const currentUser = JSON.parse(
+    localStorage.getItem("currentUser")
+  );
 
-    if (!currentUser) {
-      toast.error("Please login first ❗");
-      return;
-    }
+  if (!currentUser) {
+    toast.error("Please login first ❗");
+    return;
+  }
 
-    // 🔥 GET USER-SPECIFIC CART KEY
-    const cartKey = `cartItems_${currentUser.email}`;
+  const cartKey = `cartItems_${currentUser.email}`;
 
-    const cart =
-      JSON.parse(localStorage.getItem(cartKey)) || [];
+  let cart =
+    JSON.parse(localStorage.getItem(cartKey)) || [];
 
-    const itemIndex = cart.findIndex(
-      (item) => item._id === product._id
-    );
+  // Check if product already exists
+  const existingItem = cart.find(
+    (item) => String(item._id) === String(product._id)
+  );
 
-    if (itemIndex > -1) {
-      cart[itemIndex].quantity =
-        Number(cart[itemIndex].quantity || 0) +
-        Number(quantity || 1);
-    } else {
-      cart.push({
-        _id: product._id,
-        name:
-          product.productName ||
-          product.name ||
-          "",
-        price:
-          product.discountPrice ||
-          product.price ||
-          0,
-        image:
-          product.images?.[0] ||
-          product.image ||
-          "",
-        quantity: Number(quantity || 1),
-      });
-    }
+  if (existingItem) {
+    // Increase quantity
+    existingItem.quantity += quantity;
+  } else {
+    // Add new item
+    cart.push({
+      _id: product._id,
+      name:
+        product.productName ||
+        product.name ||
+        "",
+      price:
+        product.discountPrice ||
+        product.price ||
+        0,
+      image:
+        product.images?.[0] ||
+        product.image ||
+        "",
+      quantity: quantity,
+    });
+  }
 
-    localStorage.setItem(
-      cartKey,
-      JSON.stringify(cart)
-    );
+  localStorage.setItem(
+    cartKey,
+    JSON.stringify(cart)
+  );
 
-    window.dispatchEvent(
-      new Event("cartUpdated")
-    );
+  window.dispatchEvent(
+    new Event("cartUpdated")
+  );
 
-    toast.success(
-      `${quantity} item(s) added to cart 🛒`
-    );
-  };
+  toast.success(
+    `${quantity} item(s) added to cart 🛒`
+  );
+};
 
   // WISHLIST
   const toggleWishlist = () => {
@@ -208,6 +209,50 @@ export default function ProductDetails() {
     window.dispatchEvent(
       new Event("wishlistUpdated")
     );
+  };
+
+  // TRUNCATE TEXT AFTER 500 CHARS (PRESERVING HTML)
+  const truncateDescription = (html, isExpanded) => {
+    if (!html) return "";
+    
+    if (isExpanded) {
+      return html; // Return full HTML when expanded
+    }
+    
+    const text = html.replace(/<[^>]*>/g, ""); // Remove HTML tags for counting
+    
+    if (text.length > 500) {
+      // Truncate HTML while preserving tags
+      let result = '';
+      let charCount = 0;
+      let inTag = false;
+      let tagBuffer = '';
+      
+      for (let i = 0; i < html.length; i++) {
+        const char = html[i];
+        
+        if (char === '<') {
+          inTag = true;
+          tagBuffer = char;
+        } else if (char === '>' && inTag) {
+          inTag = false;
+          tagBuffer += char;
+          result += tagBuffer;
+        } else if (inTag) {
+          tagBuffer += char;
+        } else {
+          if (charCount < 500) {
+            result += char;
+            charCount++;
+          } else {
+            break;
+          }
+        }
+      }
+      
+      return result + '...';
+    }
+    return html;
   };
 
   if (loading)
@@ -371,9 +416,24 @@ export default function ProductDetails() {
               Product Details
             </h3>
 
-            <p className="text-gray-600 leading-6 xs:leading-7 sm:leading-8 text-sm xs:text-base">
-              {product.description}
-            </p>
+            <div 
+              className="text-gray-600 leading-7 text-sm xs:text-base overflow-hidden break-words [&_strong]:font-bold [&_strong]:text-gray-800 [&_b]:font-bold [&_b]:text-gray-800 [&_i]:italic [&_em]:italic [&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:ml-5 [&_li]:mb-1.5 [&_li]:ml-2 [&_h1]:text-lg [&_h1]:font-bold [&_h1]:mt-4 [&_h1]:mb-2 [&_h2]:text-base [&_h2]:font-bold [&_h2]:mt-4 [&_h2]:mb-2 [&_h3]:font-bold [&_h3]:mt-3 [&_h3]:mb-2 [&_a]:text-orange-500 [&_a]:underline"
+              dangerouslySetInnerHTML={{ __html: truncateDescription(product.description, expandedDescription) }}
+              style={{
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                hyphens: 'auto'
+              }}
+            />
+
+            {product.description && product.description.replace(/<[^>]*>/g, "").length > 500 && (
+              <button
+                onClick={() => setExpandedDescription(!expandedDescription)}
+                className="mt-3 xs:mt-4 text-orange-500 font-bold hover:text-orange-600 transition-all text-sm xs:text-base"
+              >
+                {expandedDescription ? "Read Less" : "Read More"}
+              </button>
+            )}
 
           </div>
 
@@ -439,44 +499,47 @@ export default function ProductDetails() {
           </div>
 
           {/* ACTION BUTTONS */}
-          <div className="flex flex-col xs:flex-row gap-2 xs:gap-3 sm:gap-4 mt-6 xs:mt-8 sm:mt-10">
+<div className="mt-6 xs:mt-8 sm:mt-10">
+  <div className="grid grid-cols-3 gap-3 sm:gap-4">
 
-            <button
-              onClick={addToCart}
-              className="flex-1 bg-gray-900 hover:bg-orange-500 text-white py-3 xs:py-4 sm:py-5 rounded-lg xs:rounded-xl sm:rounded-2xl font-bold flex items-center justify-center gap-2 xs:gap-3 text-xs xs:text-sm sm:text-base transition-all duration-300 shadow-lg hover:shadow-orange-200"
-            >
-              <FaShoppingCart size={16} />
-              <span className="hidden xs:inline">Add To Cart</span>
-              <span className="xs:hidden">Add</span>
-            </button>
+    {/* Add To Cart */}
+    <button
+      onClick={addToCart}
+      className="bg-gray-900 hover:bg-orange-500 text-white py-3 xs:py-4 sm:py-5 rounded-lg xs:rounded-xl sm:rounded-2xl font-bold flex items-center justify-center gap-2 text-xs xs:text-sm sm:text-base transition-all duration-300 shadow-lg hover:shadow-orange-200"
+    >
+      <FaShoppingCart size={16} />
+      <span className="hidden sm:inline">
+        Add To Cart
+      </span>
+    </button>
 
-            <button
-              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 xs:py-4 sm:py-5 rounded-lg xs:rounded-xl sm:rounded-2xl font-bold flex items-center justify-center gap-2 xs:gap-3 text-xs xs:text-sm sm:text-base transition-all duration-300 shadow-lg hover:shadow-orange-200"
-            >
-              <FaBolt size={16} />
-              <span className="hidden xs:inline">Buy Now</span>
-              <span className="xs:hidden">Buy</span>
-            </button>
+    {/* Buy Now */}
+    <button
+      className="bg-orange-500 hover:bg-orange-600 text-white py-3 xs:py-4 sm:py-5 rounded-lg xs:rounded-xl sm:rounded-2xl font-bold flex items-center justify-center gap-2 text-xs xs:text-sm sm:text-base transition-all duration-300 shadow-lg hover:shadow-orange-200"
+    >
+      <FaBolt size={16} />
+      <span className="hidden sm:inline">
+        Buy Now
+      </span>
+    </button>
 
-            <button
-              onClick={toggleWishlist}
-              className={`w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 rounded-lg xs:rounded-xl sm:rounded-2xl border-2 flex items-center justify-center transition-all ${
-                isWishlisted
-                  ? "bg-red-50 border-red-300 text-red-500"
-                  : "border-gray-200 text-gray-400 hover:text-red-500"
-              }`}
-            >
-              <FaHeart
-                size={16}
-                className={
-                  isWishlisted
-                    ? "fill-current"
-                    : ""
-                }
-              />
-            </button>
+    {/* Wishlist */}
+    <button
+      onClick={toggleWishlist}
+      className={`h-full min-h-[48px] xs:min-h-[56px] sm:min-h-[64px] rounded-lg xs:rounded-xl sm:rounded-2xl border-2 flex items-center justify-center transition-all ${
+        isWishlisted
+          ? "bg-red-50 border-red-300 text-red-500"
+          : "border-gray-200 text-gray-400 hover:text-red-500"
+      }`}
+    >
+      <FaHeart
+        size={18}
+        className={isWishlisted ? "fill-current" : ""}
+      />
+    </button>
 
-          </div>
+  </div>
+</div>
 
           {/* FEATURES */}
           <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-3 xs:gap-4 mt-8 xs:mt-10 sm:mt-12">

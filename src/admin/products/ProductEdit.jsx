@@ -9,6 +9,9 @@ import {
 } from "react-icons/fa";
 import BASE_URL, { getImageUrl } from "../../BASEURL";
 
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+
 export default function ProductEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -387,20 +390,35 @@ export default function ProductEdit() {
 </div>
 
           {/* DESCRIPTION */}
-          <div>
-            <label className="font-semibold mb-2 flex items-center gap-2">
-              <FaAlignLeft />
-              Description
-            </label>
+       <div>
+  <label className="font-semibold mb-2 flex items-center gap-2">
+    <FaAlignLeft />
+    Description
+  </label>
 
-            <textarea
-              name="description"
-              value={form.description}
-              onChange={handleChange}
-              placeholder="Enter product description"
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 min-h-[140px]"
-            />
-          </div>
+  <ReactQuill
+    theme="snow"
+    value={form.description}
+    onChange={(value) =>
+      setForm((prev) => ({
+        ...prev,
+        description: value,
+      }))
+    }
+    modules={{
+      toolbar: [
+        [{ header: [1, 2, 3, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ color: [] }, { background: [] }],
+        [{ align: [] }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link"],
+        ["clean"],
+      ],
+    }}
+    className="bg-white rounded-xl"
+  />
+</div>
 
           {/* CHECKBOXES */}
           <div className="flex flex-wrap gap-6">
