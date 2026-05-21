@@ -3,40 +3,49 @@
 
 // const slides = [
 //   {
-//     title: "Balanced Spaces",
-//     highlight: "Positive Energy",
+//     title: "Sacred Rudraksha",
+//     highlight: "Collection",
 //     subtitle: "Inspired Living Collection",
 //     description:
-//       "Discover thoughtfully crafted products designed to bring harmony, peace, and elegance into modern homes and workplaces.",
-//     image:
-//       "https://res.cloudinary.com/domq86row/image/upload/v1778251631/WhatsApp_Image_2026-05-04_at_3.13.11_PM_sdynan.jpg",
-//     accent: "#d4a017",
-//     light: "#fef3c7",
-//     dark: "#78350f",
+//       "Experience the divine power of authentic Rudraksha beads, believed to bring positivity, peace, protection, and spiritual balance into your life.",
+//     image: "/image/banner/Frame%20r.png",
+//     accent: "#C46A1A",      // warm saffron-orange
+//     textColor: "#5C2D0A",   // deep brown text
+//     descColor: "#7A4B21",   // soft earthy brown
+//     tagBg: "#FDF2E9",       // light cream/peach tag
+//     tagText: "#C46A1A",
+//     btnBg: "#B85C0D",       // CTA button
+//     btnText: "#ffffff",
 //   },
 //   {
-//     title: "Sacred Design",
-//     highlight: "Timeless Traditions",
-//     subtitle: "Modern Spiritual Decor",
+//     title: "Sacred Yantra &",
+//     highlight: "Spiritual Artworks",
+//     subtitle: "🔥 LIMITED TIME DEAL 🔥",
 //     description:
-//       "A premium collection blending traditional inspiration with contemporary aesthetics for meaningful interiors.",
-//     image:
-//       "https://res.cloudinary.com/domq86row/image/upload/v1778251631/WhatsApp_Image_2026-05-04_at_3.13.17_PM_z5ohlv.jpg",
-//     accent: "#0f766e",
-//     light: "#ccfbf1",
-//     dark: "#134e4a",
+//       "Transform your workspace & home with Vastu-perfect handcrafted designs. Enjoy an EXTRA 15% DISCOUNT on your first order. Use Code: DIVINE15.",
+//     image: "/image/banner/Frame%208.png",
+//     accent: "#B8860B",       // Dark Golden for Highlights
+//     textColor: "#483C32",    // Deep Taupe/Brown for visibility on Cream
+//     descColor: "#5e3f40",    // Muted Brown Description
+//     tagBg: "#EAD8B1",        // Creamy Beige Tag
+//     tagText: "#6B4226",      // Bronze Tag text
+//     btnBg: "#8B5E3C",        // Coffee Brown Button
+//     btnText: "#ffffff",
 //   },
 //   {
-//     title: "Elevate Every",
-//     highlight: "Corner",
-//     subtitle: "Luxury Wellness Essentials",
+//     title: "Bring Home",
+//     highlight: "Blessings & Pure Positivity",
+//     subtitle: "🎁 EXCLUSIVE COMBO OFFER 🎁",
 //     description:
-//       "Create calm and uplifting environments with artistic elements crafted to inspire positivity and refined living.",
-//     image:
-//       "https://res.cloudinary.com/domq86row/image/upload/v1778251631/WhatsApp_Image_2026-05-04_at_3.13.23_PM_snrp8o.jpg",
-//     accent: "#7c3aed",
-//     light: "#ede9fe",
-//     dark: "#4c1d95",
+//       "Buy any 2 Premium Divine Frames and get a Sacred Ritual Kit absolutely FREE + Save up to ₹500. Offer valid till this Sunday only!",
+//     image: "/image/banner/Frame%207.png",
+//     accent: "#FFD700",       // Bright Gold for contrast on Orange
+//     textColor: "#1A1410",    // Darker brown for better readability
+//     descColor: "#3E2723",    // Deep Wood Brown description
+//     tagBg: "#E65100",        // Deep Orange Tag
+//     tagText: "#FFF3E0",      // Off-white/Cream Tag text
+//     btnBg: "#BF360C",        // Rust Red/Deep Orange Button
+//     btnText: "#ffffff",
 //   },
 // ];
 
@@ -56,34 +65,27 @@
 
 //   return (
 //     <section className="spiritual-hero">
-//       {/* BACKGROUND */}
-//       <div className="vastu-background">
-//         <div className="mandala mandala-one"></div>
-//         <div className="mandala mandala-two"></div>
-//         <div className="yantra-grid"></div>
-//         <div className="spiritual-glow"></div>
-
-//         {/* Floating Particles */}
-//         <span className="particle p1"></span>
-//         <span className="particle p2"></span>
-//         <span className="particle p3"></span>
-//         <span className="particle p4"></span>
+//       {/* BACKGROUND IMAGE CONTAINER */}
+//       <div className="hero-bg-container">
+//         <img
+//           key={slide.image}
+//           src={slide.image}
+//           alt={slide.title}
+//           className="hero-bg-image"
+//         />
 //       </div>
 
 //       <div className="hero-wrapper">
-//         {/* LEFT */}
+//         {/* CONTENT */}
 //         <div key={current} className="hero-content animate-content">
 //           <span
 //             className="hero-tag"
-//             style={{
-//               background: slide.light,
-//               color: slide.dark,
-//             }}
+//             style={{ background: slide.tagBg, color: slide.tagText }}
 //           >
-//             ✨ {slide.subtitle}
+//             {slide.subtitle}
 //           </span>
 
-//           <h1 className="hero-title">
+//           <h1 className="hero-title" style={{ color: slide.textColor }}>
 //             {slide.title}
 //             <span style={{ color: slide.accent }}>
 //               <br />
@@ -91,57 +93,19 @@
 //             </span>
 //           </h1>
 
-//           <p className="hero-description">{slide.description}</p>
+//           <p className="hero-description" style={{ color: slide.descColor }}>
+//             {slide.description}
+//           </p>
 
 //           <div className="hero-buttons">
 //             <button
 //               className="primary-btn"
-//               style={{ background: slide.accent }}
+//               style={{ background: slide.btnBg, color: slide.btnText }}
 //               onClick={() => navigate("/shop")}
 //             >
-//               Explore Collection
-//             </button>
-
-//             <button
-//               className="secondary-btn"
-//               style={{
-//                 borderColor: slide.accent,
-//                 color: slide.accent,
-//               }}
-//               onClick={() => navigate("/contact")}
-//             >
-//               Connect With Us
+//               SHOP NOW
 //             </button>
 //           </div>
-//         </div>
-
-//         {/* RIGHT */}
-//         <div key={slide.image} className="hero-image-section animate-image">
-//           <div
-//             className="image-card"
-//             style={{
-//               borderColor: `${slide.accent}30`,
-//             }}
-//           >
-//             <div
-//               className="image-overlay"
-//               style={{
-//                 background: `linear-gradient(to top, ${slide.accent}20, transparent)`,
-//               }}
-//             ></div>
-
-//             <img src={slide.image} alt={slide.title} />
-//           </div>
-
-//           <div
-//             className="floating floating-one"
-//             style={{ background: slide.light }}
-//           ></div>
-
-//           <div
-//             className="floating floating-two"
-//             style={{ background: `${slide.accent}20` }}
-//           ></div>
 //         </div>
 //       </div>
 
@@ -154,297 +118,152 @@
 //             className={`dot ${current === idx ? "active" : ""}`}
 //             style={{
 //               background:
-//                 current === idx ? slide.accent : "rgba(148,163,184,0.4)",
+//                 current === idx
+//                   ? "#111111"
+//                   : "rgba(17, 17, 17, 0.4)",
 //             }}
 //           />
 //         ))}
 //       </div>
 
-//       <style jsx>{`
+//       {/* STYLES */}
+//       <style>{`
 //         .spiritual-hero {
 //           position: relative;
-//           min-height: 100vh;
+//           /* ઈમેજની હાઇટ ના વધે તે માટે આખા કમ્પોનન્ટની ઊંચાઈ અહીં સેટ કરી છે */
+//           height: 75vh; 
+//           width: 100%;
 //           overflow: hidden;
-//           background: linear-gradient(to bottom right, #ffffff, #fffdf8);
 //           display: flex;
 //           align-items: center;
-//           padding: 5rem 2rem;
+//           justify-content: center;
+//           padding: 0;
+//           margin: 0;
+//           background-color: #fff;
 //         }
 
-//         /* BACKGROUND */
-//         .vastu-background {
+//         .hero-bg-container {
 //           position: absolute;
 //           inset: 0;
-//           overflow: hidden;
+//           width: 100%;
+//           height: 100%;
 //           z-index: 0;
-//           pointer-events: none;
 //         }
 
-//         .mandala {
-//           position: absolute;
-//           border-radius: 50%;
-//           opacity: 0.08;
-//           animation: rotateMandala 30s linear infinite;
-//         }
-
-//         .mandala-one {
-//           width: 520px;
-//           height: 520px;
-//           top: -120px;
-//           right: -100px;
-//           background:
-//             radial-gradient(circle, transparent 58%, #d4a017 60%, transparent 62%),
-//             radial-gradient(circle, transparent 48%, #f59e0b 50%, transparent 52%),
-//             radial-gradient(circle, transparent 38%, #fbbf24 40%, transparent 42%);
-//         }
-
-//         .mandala-two {
-//           width: 380px;
-//           height: 380px;
-//           bottom: -80px;
-//           left: -80px;
-//           background:
-//             radial-gradient(circle, transparent 58%, #7c3aed 60%, transparent 62%),
-//             radial-gradient(circle, transparent 48%, #a855f7 50%, transparent 52%),
-//             radial-gradient(circle, transparent 38%, #c084fc 40%, transparent 42%);
-//           animation-direction: reverse;
-//         }
-
-//         .yantra-grid {
-//           position: absolute;
-//           inset: 0;
-//           opacity: 0.04;
-//           background-image:
-//             linear-gradient(rgba(212,160,23,0.3) 1px, transparent 1px),
-//             linear-gradient(90deg, rgba(212,160,23,0.3) 1px, transparent 1px);
-//           background-size: 60px 60px;
-//         }
-
-//         .spiritual-glow {
-//           position: absolute;
-//           width: 700px;
-//           height: 700px;
-//           background: radial-gradient(
-//             circle,
-//             rgba(245, 158, 11, 0.15),
-//             transparent 70%
-//           );
-//           top: 50%;
-//           left: 50%;
-//           transform: translate(-50%, -50%);
-//           filter: blur(40px);
-//           animation: pulseGlow 5s ease-in-out infinite;
-//         }
-
-//         /* PARTICLES */
-//         .particle {
-//           position: absolute;
-//           width: 8px;
-//           height: 8px;
-//           border-radius: 50%;
-//           background: rgba(255, 193, 7, 0.4);
-//           animation: floatParticle 12s linear infinite;
-//         }
-
-//         .p1 {
-//           left: 10%;
-//           top: 90%;
-//           animation-delay: 0s;
-//         }
-
-//         .p2 {
-//           left: 30%;
-//           top: 95%;
-//           animation-delay: 3s;
-//         }
-
-//         .p3 {
-//           left: 70%;
-//           top: 92%;
-//           animation-delay: 6s;
-//         }
-
-//         .p4 {
-//           left: 90%;
-//           top: 96%;
-//           animation-delay: 9s;
+//         .hero-bg-image {
+//           width: 100%;
+//           height: 100%;
+//           object-fit: cover;
+//           opacity: 1 !important;
+//           filter: none !important;
 //         }
 
 //         /* LAYOUT */
 //         .hero-wrapper {
-//           max-width: 1300px;
-//           margin: auto;
+//           position: absolute;
+//           z-index: 2;
 //           width: 100%;
+//           height: 100%;
 //           display: flex;
 //           align-items: center;
-//           justify-content: space-between;
-//           gap: 5rem;
-//           position: relative;
-//           z-index: 2;
-//           flex-wrap: wrap;
+//           justify-content: flex-start;
+//           padding-left: 8%;
+//           padding-right: 2rem;
+//           top: 0;
+//           left: 0;
+//           box-sizing: border-box;
 //         }
 
 //         .hero-content {
-//           flex: 1;
-//           min-width: 320px;
+//           max-width: 600px;
+//           animation: slideFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 //         }
 
 //         .hero-tag {
 //           display: inline-block;
-//           padding: 0.7rem 1.2rem;
-//           border-radius: 999px;
 //           font-size: 0.8rem;
-//           font-weight: 600;
-//           margin-bottom: 1.8rem;
+//           letter-spacing: 1px;
+//           margin-bottom: 1rem;
+//           font-weight: 800;
+//           padding: 5px 16px;
+//           border-radius: 50px;
+//           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 //         }
 
 //         .hero-title {
-//           font-size: clamp(2.8rem, 5vw, 5rem);
-//           line-height: 1.1;
-//           color: #0f172a;
-//           margin-bottom: 1.5rem;
-//           font-weight: 800;
+//           font-size: clamp(1.8rem, 3.8vw, 3.8rem);
+//           line-height: 1.2;
+//           font-weight: 900;
+//           text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.9), 
+//                        -2px -2px 4px rgba(255, 255, 255, 0.9);
+//           letter-spacing: -0.5px;
+//           margin: 0 0 1rem 0;
 //         }
 
 //         .hero-description {
-//           font-size: 1.05rem;
-//           line-height: 1.9;
-//           color: #64748b;
-//           max-width: 580px;
-//           margin-bottom: 2.5rem;
+//           font-size: clamp(0.95rem, 1.15vw, 1.15rem);
+//           line-height: 1.5;
+//           max-width: 500px;
+//           font-weight: 600;
+//           text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+//           margin: 0 0 1.5rem 0;
 //         }
 
 //         /* BUTTONS */
 //         .hero-buttons {
 //           display: flex;
-//           gap: 1rem;
-//           flex-wrap: wrap;
-//         }
-
-//         .primary-btn,
-//         .secondary-btn {
-//           padding: 0.95rem 2rem;
-//           border-radius: 14px;
-//           font-size: 0.95rem;
-//           font-weight: 600;
-//           cursor: pointer;
-//           transition: 0.3s ease;
+//           gap: 16px;
 //         }
 
 //         .primary-btn {
 //           border: none;
-//           color: white;
-//           animation: pulseButton 2s infinite;
+//           padding: 12px 36px;
+//           border-radius: 50px;
+//           font-weight: 800;
+//           font-size: 0.9rem;
+//           letter-spacing: 1px;
+//           cursor: pointer;
+//           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+//           transition: all 0.3s ease;
 //         }
 
-//         .primary-btn:hover,
-//         .secondary-btn:hover {
-//           transform: translateY(-4px) scale(1.02);
-//         }
-
-//         .secondary-btn {
-//           background: white;
-//           border: 1px solid;
-//         }
-
-//         /* IMAGE */
-//         .hero-image-section {
-//           flex: 1;
-//           min-width: 320px;
-//           position: relative;
-//           display: flex;
-//           justify-content: center;
-//         }
-
-//         .image-card {
-//           position: relative;
-//           width: 100%;
-//           max-width: 500px;
-//           border-radius: 32px;
-//           overflow: hidden;
-//           border: 1px solid;
-//           background: white;
-//           box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
-//           animation: floatingCard 5s ease-in-out infinite;
-//         }
-
-//         .image-card img {
-//           width: 100%;
-//           display: block;
-//           object-fit: cover;
-//           transition: transform 0.6s ease;
-//         }
-
-//         .image-card:hover img {
-//           transform: scale(1.08);
-//         }
-
-//         .image-overlay {
-//           position: absolute;
-//           inset: 0;
-//           z-index: 2;
-//         }
-
-//         .floating {
-//           position: absolute;
-//           border-radius: 50%;
-//           filter: blur(15px);
-//           z-index: -1;
-//           animation: floatingOrb 8s ease-in-out infinite;
-//         }
-
-//         .floating-one {
-//           width: 140px;
-//           height: 140px;
-//           top: -30px;
-//           right: 10%;
-//         }
-
-//         .floating-two {
-//           width: 180px;
-//           height: 180px;
-//           bottom: -40px;
-//           left: 0;
-//           animation-delay: 2s;
+//         .primary-btn:hover {
+//           transform: translateY(-2px);
+//           box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+//           opacity: 0.95;
 //         }
 
 //         /* DOTS */
 //         .slider-dots {
 //           position: absolute;
-//           bottom: 2rem;
+//           bottom: 25px;
 //           left: 50%;
 //           transform: translateX(-50%);
 //           display: flex;
-//           gap: 0.6rem;
+//           gap: 12px;
 //           z-index: 5;
 //         }
 
 //         .dot {
 //           width: 10px;
 //           height: 10px;
-//           border: none;
-//           border-radius: 50px;
+//           border-radius: 50%;
+//           border: 1px solid rgba(255,255,255,0.5);
 //           cursor: pointer;
-//           transition: 0.4s ease;
+//           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+//           padding: 0;
 //         }
 
 //         .dot.active {
-//           width: 32px;
+//           width: 30px;
+//           border-radius: 999px;
 //         }
 
-//         /* ANIMATIONS */
-//         .animate-content {
-//           animation: slideFade 0.8s ease;
-//         }
-
-//         .animate-image {
-//           animation: zoomFade 1s ease;
-//         }
-
+//         /* ANIMATION */
 //         @keyframes slideFade {
 //           from {
 //             opacity: 0;
-//             transform: translateY(40px);
+//             transform: translateY(12px);
 //           }
 //           to {
 //             opacity: 1;
@@ -452,125 +271,57 @@
 //           }
 //         }
 
-//         @keyframes zoomFade {
-//           from {
-//             opacity: 0;
-//             transform: scale(0.9);
+//         /* RESPONSIVE BREAKPOINTS */
+//         @media (max-width: 1024px) {
+//           .spiritual-hero {
+//             height: 65vh; /* ટેબ્લેટ પર હાઇટ પ્રમાણસર નાની થશે */
 //           }
-//           to {
-//             opacity: 1;
-//             transform: scale(1);
-//           }
-//         }
-
-//         @keyframes rotateMandala {
-//           from {
-//             transform: rotate(0deg);
-//           }
-//           to {
-//             transform: rotate(360deg);
-//           }
-//         }
-
-//         @keyframes floatingCard {
-//           0%,
-//           100% {
-//             transform: translateY(0px);
-//           }
-//           50% {
-//             transform: translateY(-12px);
-//           }
-//         }
-
-//         @keyframes floatingOrb {
-//           0%,
-//           100% {
-//             transform: translateY(0px) scale(1);
-//           }
-//           50% {
-//             transform: translateY(-25px) scale(1.1);
-//           }
-//         }
-
-//         @keyframes pulseGlow {
-//           0%,
-//           100% {
-//             opacity: 0.6;
-//             transform: translate(-50%, -50%) scale(1);
-//           }
-//           50% {
-//             opacity: 1;
-//             transform: translate(-50%, -50%) scale(1.1);
-//           }
-//         }
-
-//         @keyframes pulseButton {
-//           0%,
-//           100% {
-//             box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-//           }
-//           50% {
-//             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-//           }
-//         }
-
-//         @keyframes floatParticle {
-//           0% {
-//             transform: translateY(0) scale(0);
-//             opacity: 0;
-//           }
-//           20% {
-//             opacity: 1;
-//             transform: scale(1);
-//           }
-//           100% {
-//             transform: translateY(-100vh) scale(0.5);
-//             opacity: 0;
-//           }
-//         }
-
-//         /* RESPONSIVE */
-//         @media (max-width: 900px) {
 //           .hero-wrapper {
-//             flex-direction: column-reverse;
-//             text-align: center;
-//             gap: 3rem;
+//             padding-left: 5%;
 //           }
-
-//           .hero-buttons {
-//             justify-content: center;
+//           .hero-content {
+//             max-width: 500px;
 //           }
 //         }
 
 //         @media (max-width: 768px) {
-//           .mandala-one {
-//             width: 320px;
-//             height: 320px;
-//           }
-
-//           .mandala-two {
-//             width: 240px;
-//             height: 240px;
-//           }
-
-//           .spiritual-glow {
-//             width: 400px;
-//             height: 400px;
-//           }
-//         }
-
-//         @media (max-width: 480px) {
 //           .spiritual-hero {
-//             padding: 4rem 1.2rem;
+//             height: auto; /* મોબાઈલમાં લખાણ કટ ન થાય એટલે હાઇટ કન્ટેન્ટ પ્રમાણે ઓટોમેટીક એડજસ્ટ થશે */
+//             min-height: 550px; 
+//             padding: 4rem 0;
 //           }
-
+//           .hero-overlay {
+//             background: rgba(255, 255, 255, 0.6);
+//             backdrop-filter: blur(2px);
+//           }
+//           .hero-wrapper {
+//             position: relative; /* સ્ટેટિક ફ્લો જેથી ઈમેજની બહાર કન્ટેન્ટ ના જાય */
+//             justify-content: center;
+//             text-align: center;
+//             padding: 2rem 1.5rem;
+//           }
+//           .hero-content {
+//             max-width: 100%;
+//             display: flex;
+//             flex-direction: column;
+//             align-items: center;
+//           }
 //           .hero-title {
-//             font-size: 2.3rem;
+//             text-shadow: 0px 0px 8px rgba(255, 255, 255, 1);
 //           }
-
-//           .primary-btn,
-//           .secondary-btn {
+//           .hero-description {
+//             text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
+//           }
+//           .hero-buttons {
 //             width: 100%;
+//             max-width: 260px;
+//             justify-content: center;
+//           }
+//           .primary-btn {
+//             width: 100%;
+//           }
+//           .slider-dots {
+//             bottom: 20px;
 //           }
 //         }
 //       `}</style>
@@ -583,47 +334,79 @@ import { useNavigate } from "react-router-dom";
 
 const slides = [
   {
-    title: "Balanced Spaces",
-    highlight: "Positive Energy",
+    title: "Sacred Rudraksha",
+    highlight: "Collection",
     subtitle: "Inspired Living Collection",
     description:
-      "Discover thoughtfully crafted products designed to bring harmony, peace, and elegance into modern homes and workplaces.",
-    image:
-      "https://res.cloudinary.com/domq86row/image/upload/v1778251631/WhatsApp_Image_2026-05-04_at_3.13.11_PM_sdynan.jpg",
-    accent: "#d4a017",
-    light: "#fef3c7",
-    dark: "#78350f",
+      "Experience the divine power of authentic Rudraksha beads, believed to bring positivity, peace, protection, and spiritual balance into your life.",
+
+    image: "/image/banner/Frame%20r.png",
+    mobileImage: "/image/banner/r1.png",
+
+    // Navigation Path
+    path: "/shop?category=RUDRAKSH",
+
+    accent: "#B8860B",
+    textColor: "#483C32",
+    descColor: "#86040b",
+    tagBg: "#EAD8B1",
+    tagText: "#6B4226",
+    btnBg: "#8B5E3C",
+    btnText: "#ffffff",
   },
   {
-    title: "Sacred Design",
-    highlight: "Timeless Traditions",
-    subtitle: "Modern Spiritual Decor",
+    title: "Powerful Aayudh",
+    highlight: "Protection Frames",
+    subtitle: "✨ INVITE POSITIVE ENERGY ✨",
     description:
-      "A premium collection blending traditional inspiration with contemporary aesthetics for meaningful interiors.",
-    image:
-      "https://res.cloudinary.com/domq86row/image/upload/v1778251631/WhatsApp_Image_2026-05-04_at_3.13.17_PM_z5ohlv.jpg",
-    accent: "#0f766e",
-    light: "#ccfbf1",
-    dark: "#134e4a",
+      "Beautify your space with spiritual Vastu artworks that bring harmony, positivity, and peaceful energy.",
+
+    image: "/image/banner/Frame%208.png",
+    mobileImage: "/image/banner/r2.png",
+
+    // Navigation Path
+    path: "/shop?category=AAYUDH FRAME",
+
+    accent: "#B8860B",
+    textColor: "#483C32",
+    descColor: "#86040b",
+    tagBg: "#EAD8B1",
+    tagText: "#6B4226",
+    btnBg: "#8B5E3C",
+    btnText: "#ffffff",
   },
   {
-    title: "Elevate Every",
-    highlight: "Corner",
-    subtitle: "Luxury Wellness Essentials",
+    title: "Mangal Yantra",
+    highlight: "Blessings & Spiritual Strength",
+    subtitle: "🎁 EXCLUSIVE COMBO OFFER 🎁",
     description:
-      "Create calm and uplifting environments with artistic elements crafted to inspire positivity and refined living.",
-    image:
-      "https://res.cloudinary.com/domq86row/image/upload/v1778251631/WhatsApp_Image_2026-05-04_at_3.13.23_PM_snrp8o.jpg",
-    accent: "#7c3aed",
-    light: "#ede9fe",
-    dark: "#4c1d95",
+      "Buy any 2 Premium Divine Frames and get a Sacred Ritual Kit absolutely FREE + Save up to ₹500. Offer valid till this Sunday only!",
+
+    image: "/image/banner/Frame%207.png",
+    mobileImage: "/image/banner/r3.png",
+
+    // Navigation Path
+    path: "/shop?category=YANTRA",
+
+    accent: "#B8860B",
+    textColor: "#483C32",
+    descColor: "#86040b",
+    tagBg: "#EAD8B1",
+    tagText: "#6B4226",
+    btnBg: "#8B5E3C",
+    btnText: "#ffffff",
   },
 ];
 
 export default function SpiritualHero() {
   const [current, setCurrent] = useState(0);
+  const [isMobile, setIsMobile] = useState(
+    window.innerWidth <= 768
+  );
+
   const navigate = useNavigate();
 
+  // Auto slider
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
@@ -632,319 +415,335 @@ export default function SpiritualHero() {
     return () => clearInterval(timer);
   }, []);
 
+  // Detect screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () =>
+      window.removeEventListener(
+        "resize",
+        handleResize
+      );
+  }, []);
+
   const slide = slides[current];
 
   return (
     <section className="spiritual-hero">
-      {/* BACKGROUND */}
-      <div className="vastu-background">
-        <div className="mandala mandala-one"></div>
-        <div className="mandala mandala-two"></div>
-        <div className="yantra-grid"></div>
-        <div className="spiritual-glow"></div>
-
-        <span className="particle p1"></span>
-        <span className="particle p2"></span>
-        <span className="particle p3"></span>
-        <span className="particle p4"></span>
+      {/* Background Image */}
+      <div className="hero-bg-container">
+        <img
+          key={
+            isMobile
+              ? slide.mobileImage
+              : slide.image
+          }
+          src={
+            isMobile
+              ? slide.mobileImage
+              : slide.image
+          }
+          alt={slide.title}
+          className="hero-bg-image"
+        />
       </div>
 
+      {/* Content */}
       <div className="hero-wrapper">
-        {/* LEFT */}
-        <div key={current} className="hero-content animate-content">
+        <div
+          key={current}
+          className="hero-content animate-content"
+        >
           <span
             className="hero-tag"
-            style={{ background: slide.light, color: slide.dark }}
+            style={{
+              background: slide.tagBg,
+              color: slide.tagText,
+            }}
           >
-            ✨ {slide.subtitle}
+            {slide.subtitle}
           </span>
 
-          <h1 className="hero-title">
+          <h1
+            className="hero-title"
+            style={{
+              color: slide.textColor,
+            }}
+          >
             {slide.title}
-            <span style={{ color: slide.accent }}>
+            <span
+              style={{
+                color: slide.accent,
+              }}
+            >
               <br />
               {slide.highlight}
             </span>
           </h1>
 
-          <p className="hero-description">{slide.description}</p>
+          <p
+            className="hero-description"
+            style={{
+              color: slide.descColor,
+            }}
+          >
+            {slide.description}
+          </p>
 
           <div className="hero-buttons">
             <button
               className="primary-btn"
-              style={{ background: slide.accent }}
-              onClick={() => navigate("/shop")}
-            >
-              Explore Collection
-            </button>
-
-            <button
-              className="secondary-btn"
               style={{
-                borderColor: slide.accent,
-                color: slide.accent,
+                background: slide.btnBg,
+                color: slide.btnText,
               }}
-              onClick={() => navigate("/contact")}
+              onClick={() =>
+                navigate(slide.path)
+              }
             >
-              Connect With Us
+              SHOP NOW
             </button>
           </div>
-        </div>
-
-        {/* RIGHT */}
-        <div key={slide.image} className="hero-image-section animate-image">
-          <div
-            className="image-card"
-            style={{ borderColor: `${slide.accent}30` }}
-          >
-            <div
-              className="image-overlay"
-              style={{
-                background: `linear-gradient(to top, ${slide.accent}20, transparent)`,
-              }}
-            ></div>
-
-            <img src={slide.image} alt={slide.title} />
-          </div>
-
-          <div
-            className="floating floating-one"
-            style={{ background: slide.light }}
-          ></div>
-
-          <div
-            className="floating floating-two"
-            style={{ background: `${slide.accent}20` }}
-          ></div>
         </div>
       </div>
 
-      {/* DOTS */}
+      {/* Slider Dots */}
       <div className="slider-dots">
         {slides.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrent(idx)}
-            className={`dot ${current === idx ? "active" : ""}`}
-            style={{
-              background:
-                current === idx
-                  ? slide.accent
-                  : "rgba(148,163,184,0.4)",
-            }}
+            className={`dot ${
+              current === idx
+                ? "active"
+                : ""
+            }`}
           />
         ))}
       </div>
 
-      {/* STYLE */}
-      <style jsx>{`
+      <style>{`
         .spiritual-hero {
           position: relative;
-          min-height: 100vh;
-          overflow: hidden;
-          background: linear-gradient(to bottom right, #fff, #fffdf8);
-          display: flex;
-          align-items: center;
-          padding: 5rem 2rem;
-        }
-
-        /* BACKGROUND */
-        .vastu-background {
-          position: absolute;
-          inset: 0;
-          overflow: hidden;
-          z-index: 0;
-          pointer-events: none;
-        }
-
-        .mandala {
-          position: absolute;
-          border-radius: 50%;
-          opacity: 0.08;
-          animation: rotateMandala 30s linear infinite;
-        }
-
-        .mandala-one {
-          width: 520px;
-          height: 520px;
-          top: -120px;
-          right: -100px;
-          background: radial-gradient(circle, transparent 58%, #d4a017 60%);
-        }
-
-        .mandala-two {
-          width: 380px;
-          height: 380px;
-          bottom: -80px;
-          left: -80px;
-          animation-direction: reverse;
-          background: radial-gradient(circle, transparent 58%, #7c3aed 60%);
-        }
-
-        .yantra-grid {
-          position: absolute;
-          inset: 0;
-          opacity: 0.04;
-          background-image: linear-gradient(#d4a01733 1px, transparent 1px),
-            linear-gradient(90deg, #d4a01733 1px, transparent 1px);
-          background-size: 60px 60px;
-        }
-
-        .spiritual-glow {
-          position: absolute;
-          width: 600px;
-          height: 600px;
-          background: radial-gradient(circle, rgba(245, 158, 11, 0.15), transparent);
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          filter: blur(40px);
-        }
-
-        /* LAYOUT */
-        .hero-wrapper {
-          max-width: 1200px;
-          margin: auto;
           width: 100%;
+          height: 75vh;
+          overflow: hidden;
+        }
+
+        .hero-bg-container {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+        }
+
+        .hero-bg-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .hero-wrapper {
+          position: absolute;
+          inset: 0;
+          z-index: 2;
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          gap: 4rem;
-          z-index: 2;
-          flex-wrap: wrap;
+          justify-content: flex-start;
+          padding-left: 8%;
+          padding-right: 2rem;
         }
 
         .hero-content {
-          flex: 1;
-          min-width: 280px;
+          max-width: 580px;
+          animation: slideFade 0.6s ease;
         }
 
         .hero-tag {
           display: inline-block;
-          padding: 0.6rem 1rem;
+          padding: 6px 16px;
           border-radius: 999px;
           font-size: 0.8rem;
-          font-weight: 600;
-          margin-bottom: 1.5rem;
+          font-weight: 800;
+          margin-bottom: 1rem;
         }
 
         .hero-title {
-          font-size: clamp(2rem, 4vw, 4.5rem);
-          line-height: 1.1;
-          font-weight: 800;
-          color: #0f172a;
+          font-size: clamp(2rem, 4vw, 4rem);
+          line-height: 1.2;
+          font-weight: 900;
+          margin-bottom: 1rem;
+          text-shadow: 2px 2px 5px rgba(255,255,255,0.9);
         }
 
         .hero-description {
-          margin-top: 1.2rem;
           font-size: 1rem;
-          color: #64748b;
-          max-width: 520px;
-        }
-
-        /* BUTTONS */
-        .hero-buttons {
-          display: flex;
-          gap: 1rem;
-          margin-top: 2rem;
-          flex-wrap: wrap;
-        }
-
-        .primary-btn,
-        .secondary-btn {
-          padding: 0.9rem 1.8rem;
-          border-radius: 12px;
+          line-height: 1.6;
           font-weight: 600;
-          cursor: pointer;
-          transition: 0.3s ease;
+          max-width: 500px;
+          margin-bottom: 1.5rem;
+          text-shadow: 1px 1px 4px rgba(255,255,255,0.9);
         }
 
         .primary-btn {
           border: none;
-          color: white;
+          padding: 12px 34px;
+          border-radius: 999px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: 0.3s ease;
         }
 
-        .secondary-btn {
-          background: white;
-          border: 1px solid;
+        .primary-btn:hover {
+          transform: translateY(-2px);
         }
 
-        .primary-btn:hover,
-        .secondary-btn:hover {
-          transform: translateY(-3px);
-        }
-
-        /* IMAGE */
-        .hero-image-section {
-          flex: 1;
-          min-width: 280px;
-          display: flex;
-          justify-content: center;
-        }
-
-        .image-card {
-          width: 100%;
-          max-width: 450px;
-          border-radius: 28px;
-          overflow: hidden;
-          background: white;
-          border: 1px solid;
-        }
-
-        .image-card img {
-          width: 100%;
-          height: auto;
-          display: block;
-        }
-
-        /* DOTS */
         .slider-dots {
           position: absolute;
-          bottom: 2rem;
+          bottom: 20px;
           left: 50%;
           transform: translateX(-50%);
           display: flex;
-          gap: 0.5rem;
+          gap: 10px;
+          z-index: 10;
         }
 
         .dot {
           width: 10px;
           height: 10px;
-          border-radius: 50%;
+          border-radius: 999px;
           border: none;
+          background: rgba(0,0,0,0.3);
+          cursor: pointer;
+          transition: 0.3s;
         }
 
         .dot.active {
-          width: 28px;
-          border-radius: 20px;
+          width: 30px;
+          background: #111;
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 900px) {
-          .hero-wrapper {
-            flex-direction: column-reverse;
-            text-align: center;
+        @keyframes slideFade {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
           }
-
-          .hero-description {
-            margin: auto;
-          }
-
-          .hero-buttons {
-            justify-content: center;
+          to {
+            opacity: 1;
+            transform: translateY(0);
           }
         }
 
-        @media (max-width: 480px) {
-          .spiritual-hero {
-            padding: 3rem 1rem;
-          }
+        /* Tablet */
+       @media (max-width: 1024px) {
+  .spiritual-hero {
+    height: 60vh;
+  }
 
-          .primary-btn,
-          .secondary-btn {
-            width: 100%;
-          }
-        }
+  .hero-wrapper {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .hero-content {
+    max-width: 420px;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-description {
+    font-size: 0.95rem;
+  }
+}
+
+        /* Mobile */
+@media (max-width: 768px) {
+  .spiritual-hero {
+    height: 100%;
+    min-height: 500px;
+    position: relative;
+  }
+
+  .hero-bg-image {
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero-wrapper {
+    position: relative;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 30px 20px 20px;
+    width: 100%;
+    min-height: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  .hero-content {
+    max-width: 85%;
+    text-align: left;
+    margin-top: 0px;
+    padding-top: 20px;
+  }
+
+  .hero-tag {
+    font-size: 0.7rem;
+    padding: 5px 12px;
+    margin-bottom: 0.8rem;
+  }
+
+  .hero-title {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+  }
+
+  .hero-description {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .primary-btn {
+    padding: 10px 20px;
+    font-size: 0.8rem;
+  }
+
+  .slider-dots {
+    bottom: 12px;
+  }
+}
+  @media (max-width: 480px) {
+  .spiritual-hero {
+    min-height: 380px;
+  }
+
+  .hero-content {
+    max-width: 65%;
+  }
+
+  .hero-title {
+    font-size: 1.3rem;
+  }
+
+  .hero-description {
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .primary-btn {
+    padding: 8px 16px;
+    font-size: 0.75rem;
+  }
+}
       `}</style>
     </section>
   );

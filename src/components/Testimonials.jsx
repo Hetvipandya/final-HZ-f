@@ -19,10 +19,10 @@ export default function Testimonials() {
           <p className="mt-2 text-gray-600">
             Real experiences from our valued customers
           </p>
-        </div>
+        </div> 
 
         {/* SWIPER */}
-        <Swiper
+        <Swiper 
           modules={[Autoplay]}
           autoplay={{
             delay: 4000,

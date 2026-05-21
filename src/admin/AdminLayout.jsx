@@ -106,6 +106,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import AdminSidebar from "./components/AdminSidebar";
 import AdminTopbar from "./components/AdminTopbar";
+// import WhatsAppButton from "../components/WhatsAppButton";
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -128,7 +129,7 @@ export default function AdminLayout() {
           h-[calc(100vh-64px)]
           z-40
           transition-transform duration-300
-          md:translate-x-0
+          md:translate-x-0 
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
@@ -152,6 +153,8 @@ export default function AdminLayout() {
           <Outlet />
         </main>
       </div>
+
+      {/* <WhatsAppButton /> */}
     </div>
   );
 }
